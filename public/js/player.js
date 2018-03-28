@@ -1,6 +1,6 @@
 import traitHolder, * as traits from "/js/lib/traits.js";
 import vec, * as v 				from "/js/lib/vector.js";
-import bullet 					from "/js/bullet.js";
+import gun 						from "/js/gun.js";
 
 const player = (pos) => {
 	const that = traitHolder(); 
@@ -29,6 +29,22 @@ const player = (pos) => {
 		oubArea: [0, 0, 600, 300]	
 	})(that);
 
+	traits.addGunTrait({
+		gun: gun({
+			pos: that.pos.copy(),
+			size: vec(20, 11),
+			ammoCapacity: 20,
+			shotDelay: 15,
+			reloadTime: 180,
+			bulletSpec: {
+				speed: 15,
+				color: "yellow",
+				size: vec(20, 11),
+				friendly: true,
+			}
+		})
+	})(that);
+
 	that.downing = false;
 
 	that.dir = 0;
@@ -50,32 +66,13 @@ const player = (pos) => {
 		}
 	}
 
-	that.aiming = 1;
-	that.shooting = false;
-	that.reloadTime = 0;
-	let bulletPos;
-
-	that.handleShoot = ({ world: { add }, audio: { play } }) => {
-		if(that.velocity.x > 0) that.aiming = 1;
-		if(that.velocity.x < 0) that.aiming = -1;
-			
-		that.reloadTime--;
-
-		if(that.shooting && that.reloadTime <= 0){
-			play("shoot");
-			if(that.aiming > 0) bulletPos = vec(that.center.x + 5, that.pos.y + 2);
-			else bulletPos = vec(that.center.x -25, that.pos.y + 2);
-			add(bullet({
-				pos: bulletPos,
-				velocity: vec(that.aiming*15, Math.random()-0.5),
-				size: vec(20, 11),
-				friendly: true,
-			}), "bullets", 3);
-			that.reloadTime = 15;
-		}
+	that.handleShooting = ({ world: { add, guns } }) => {
+		if(that.velocity.x > 0) that.aiming.x = 1;
+		if(that.velocity.x < 0) that.aiming.x = -1;
+		if(that.shooting) that.gun.shoot(that, add);
 	}
 
-	that.addMethods("handleControls", "handleShoot");
+	that.addMethods("handleControls", "handleShooting");
 
 	return that;
 }

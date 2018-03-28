@@ -1,6 +1,6 @@
 import traitHolder, * as traits from "/js/lib/traits.js";
 import vec, * as v 				from "/js/lib/vector.js";
-import bullet					from "/js/bullet.js";
+import gun 						from "/js/gun.js";
 
 const enemy = ({ pos, size, health, color }) => {
 	const that = traitHolder(); 
@@ -81,10 +81,24 @@ export const sniperWolf = (pos) => {
 
 	traits.addPlatformColTrait({})(that);
 
+	traits.addGunTrait({
+		gun: gun({
+			pos: that.pos.copy(),
+			size: vec(20, 10),
+			shotDelay: 1,
+			reloadTime: 1,
+			ammoCapacity: 1,
+			bulletSpec: {
+				speed: 6,
+				color: "orange",
+				size: vec(20, 10),
+			}}), 
+	})(that);
+
 	let waitCounter = 120;
 	let walkCounter = 0;
 
-	that.AI = (GAME) => {
+	that.AI = ({ world: { add, player } }) => {
 		waitCounter--;
 		walkCounter--;
 
@@ -96,29 +110,13 @@ export const sniperWolf = (pos) => {
 		if(walkCounter === 0){
 			waitCounter = 120;
 			that.acceleration.x = 0;
-			that.shoot(GAME);
+			that.gun.shoot(that, add);
 		}
-	}
-
-	let bulletVel;
-	let bulletPos;
-
-	that.shoot = ({ world: { add, player } }) => {
-		bulletVel = v.pipe(
-			v.sub(player.center, that.center),
+		that.aiming = v.pipe(
+			v.sub(that.gun.center, player.center),
 			v.normalize,
-			x => v.mul(x, 6),
+			v.reverse,
 		);
-		bulletPos = that.center.copy();
-
-		const b = bullet({ 
-			pos: bulletPos,
-			velocity: bulletVel,
-			size: vec(20, 10),
-			friendly: false,
-		})	
-		b.color = "orange";
-		add(b, "bullets", 3)
 	}
 
 	return that;

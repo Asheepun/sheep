@@ -36,8 +36,7 @@ const bullet = ({ pos, velocity, size, friendly }) => {
 	}
 
 	that.handleColX = 
-	that.handleOubX = ({ world: { remove } }) => {
-		that.layer = 3;
+	that.handleOubX = () => {
 		that.hit = true;
 	}
 

@@ -1,8 +1,8 @@
 import vec, * as v                         						from "/js/lib/vector.js";
 import { checkCol, checkSetCol, checkOub, checkPlatformSetCol } from "/js/lib/colission.js";
 
-const traitHolder = () => {
-    const that = {};
+const traitHolder = (startSpecs = {}) => {
+    const that = startSpecs;
     that.methods = [];
 
     that.update = (GAME) => {
@@ -252,4 +252,29 @@ export const addAnimationTrait = ({ frames, delay }) => (that) => {
     }
 
     that.addMethods("handleState", "animate");
+}
+
+export const addGunTrait = ({ gun, aiming = vec(0, 0) }) => (that) => {
+	that.gun = gun;
+	that.aiming = aiming;
+
+	//add the gun to the world so that it can be drawn
+	let added = false;
+	that.addGunToWorld = ({ world: { guns, add } }) => {
+		if(!added){
+			added = true;
+			add(that.gun, "guns", 6);
+		}
+	}
+
+	that.handleGunPos = () => {
+		that.gun.pos = v.pipe(
+			that.center,
+			x => v.add(x, vec(-that.gun.size.x/2, -that.size.x/2 + 4)),
+			x => v.add(x, v.mul(that.aiming, that.size.x/2))
+		);
+		that.gun.rotation = v.angle(vec(0, 0), that.aiming) - 4.7;
+	}
+
+	that.addMethods("addGunToWorld", "handleGunPos");
 }
