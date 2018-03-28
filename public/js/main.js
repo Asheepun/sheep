@@ -6,6 +6,7 @@ import keyBinder     			 from "/js/lib/keyBinder.js";
 import * as loaders  			 from "/js/lib/assets.js";
 import generateWorld 			 from "/js/generateWorld.js"
 import spawner 		 			 from "/js/spawner.js";
+import * as hud 				 from "/js/hud.js";
 
 Promise.all([
 	getCanvas(600, 300),
@@ -47,6 +48,10 @@ Promise.all([
 
 	generateWorld(map, GAME.world);
 
+	//add hud
+	GAME.world.add(hud.ammoBar(vec(5, 5)), "hud", 10);
+
+	//add spawners
 	GAME.world.add(spawner({
 		pos: vec(-60, 210),
 		types: [smallWolf],
@@ -111,7 +116,7 @@ Promise.all([
 		ctx.scale(c.scale, c.scale)
 		ctx.fillStyle = "black";
 		ctx.fillRect(0, 0, width, height)
-		GAME.world.draw(ctx);
+		GAME.world.draw(ctx, GAME);
 		ctx.restore();
 
 		setTimeout(loop, 1000/60);

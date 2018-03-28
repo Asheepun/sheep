@@ -28,7 +28,7 @@ const gun = ({ pos, size, shotDelay, reloadTime, ammoCapacity, bulletSpec }) => 
 	that.shoot = (holder, add) => {
 		if(!that.reloading && !that.shooting){
 			that.shooting = true;
-			shotDelayCounter = that.shotDelay;
+			that.shotDelayCounter = that.shotDelay;
 			
 			that.ammo--;
 			if(that.ammo <= 0) that.reload();
@@ -47,19 +47,19 @@ const gun = ({ pos, size, shotDelay, reloadTime, ammoCapacity, bulletSpec }) => 
 
 	that.reload = () => {
 		that.reloading = true;
-		reloadCounter = that.reloadTime;
+		that.reloadCounter = that.reloadTime;
 	}
 
-	let shotDelayCounter = 0;
-	let reloadCounter = 0;
+	that.shotDelayCounter = 0;
+	that.reloadCounter = 0;
 
 	that.handleDelays = () => {
-		shotDelayCounter--;
-		reloadCounter--;
+		that.shotDelayCounter--;
+		that.reloadCounter--;
 
-		if(shotDelayCounter === 0) that.shooting = false;
+		if(that.shotDelayCounter === 0) that.shooting = false;
 
-		if(reloadCounter === 0){
+		if(that.reloadCounter === 0){
 			that.reloading = false;
 			that.ammo = that.ammoCapacity;
 		}
