@@ -7,7 +7,7 @@ const player = (pos) => {
 
 	traits.addEntityTrait({
 		pos,
-		size: vec(15, 17)
+		size: vec(15, 20)
 	})(that);
 
 	traits.addSpriteTrait({
@@ -40,6 +40,7 @@ const player = (pos) => {
 				speed: 15,
 				color: "yellow",
 				size: vec(20, 11),
+				spread: 0.3,
 				friendly: true,
 			}
 		})

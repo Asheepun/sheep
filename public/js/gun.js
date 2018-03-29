@@ -35,7 +35,8 @@ const gun = ({ pos, size, shotDelay, reloadTime, ammoCapacity, bulletSpec }) => 
 
 			//make bullet
 			bulletPos = that.pos.copy();
-			bulletVel = v.mul(holder.aiming, bulletSpec.speed).add(v.rVec(-0.5, 1));
+			bulletVel = v.mul(holder.aiming, bulletSpec.speed)
+			.add(v.rVec(-bulletSpec.spread/2, bulletSpec.spread));
 
 			add(bullet(Object.assign(bulletSpec, {
 				pos: bulletPos,
@@ -46,8 +47,11 @@ const gun = ({ pos, size, shotDelay, reloadTime, ammoCapacity, bulletSpec }) => 
 	}
 
 	that.reload = () => {
-		that.reloading = true;
-		that.reloadCounter = that.reloadTime;
+		if(!that.reloading){
+			that.reloading = true;
+			that.reloadCounter = that.reloadTime;
+			that.ammo = 0;
+		}
 	}
 
 	that.shotDelayCounter = 0;

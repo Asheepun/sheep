@@ -20,8 +20,6 @@ const bullet = ({ pos, velocity, size, friendly }) => {
 		velocity,
 	})(that);
 
-	traits.addColTrait({})(that);
-
 	traits.addOubTrait({
 		oubArea: [0, 0, 600, 300]	
 	})(that);

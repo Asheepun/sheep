@@ -67,13 +67,13 @@ Promise.all([
 	GAME.world.add(spawner({
 		pos: vec(0, 0),	
 		types: [sniperWolf],
-		delay: 300,
+		delay: 900,
 	}), "spawners", 0)
 
 	GAME.world.add(spawner({
 		pos: vec(580, 0),	
 		types: [sniperWolf],
-		delay: 300,
+		delay: 900,
 	}), "spawners", 0)
 
 	const keys = keyBinder();
@@ -107,6 +107,11 @@ Promise.all([
 		down: () => GAME.world.player.shooting = true,
 		up: () => GAME.world.player.shooting = false,
 	});
+
+	keys.bind({
+		keys: ["P", "p"],
+		down: GAME.world.player.gun.reload,
+	})
 
 	const loop = () => {
 

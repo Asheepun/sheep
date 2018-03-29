@@ -90,6 +90,7 @@ export const sniperWolf = (pos) => {
 			ammoCapacity: 1,
 			bulletSpec: {
 				speed: 6,
+				spread: 2,
 				color: "orange",
 				size: vec(20, 10),
 			}}), 
