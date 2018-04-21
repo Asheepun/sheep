@@ -2,14 +2,15 @@ import traitHolder, * as traits from "/js/lib/traits.js";
 import vec, * as v 				from "/js/lib/vector.js";
 import bullet					from "/js/bullet.js";
 
-const gun = ({ pos, size, shotDelay, reloadTime, ammoCapacity, bulletSpec }) => {
+const gun = ({ pos, size, shotDelay, reloadTime, ammoCapacity, bulletSpec, sound }) => {
 	const that = traitHolder({
 		shotDelay,
 		reloadTime,
 		ammoCapacity,
 		bulletSpec,
+		sound,
 	});
-
+	
 	traits.addEntityTrait({
 		pos,
 		size,
@@ -25,7 +26,7 @@ const gun = ({ pos, size, shotDelay, reloadTime, ammoCapacity, bulletSpec }) => 
 	let bulletPos;
 	let bulletVel;
 
-	that.shoot = (holder, add) => {
+	that.shoot = (holder, add, audio) => {
 		if(!that.reloading && !that.shooting){
 			that.shooting = true;
 			that.shotDelayCounter = that.shotDelay;
@@ -42,7 +43,8 @@ const gun = ({ pos, size, shotDelay, reloadTime, ammoCapacity, bulletSpec }) => 
 				pos: bulletPos,
 				velocity: bulletVel,
 			})), "bullets", 3);
-			
+
+			audio.play(that.sound);
 		}
 	}
 

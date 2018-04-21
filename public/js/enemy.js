@@ -1,6 +1,7 @@
 import traitHolder, * as traits from "/js/lib/traits.js";
 import vec, * as v 				from "/js/lib/vector.js";
 import gun 						from "/js/gun.js";
+import { checkSetCol } 			from "/js/lib/colission.js";
 
 const enemy = ({ pos, size, health, color }) => {
 	const that = traitHolder(); 
@@ -22,6 +23,10 @@ const enemy = ({ pos, size, health, color }) => {
 	})(that);
 
 	traits.addColTrait({})(that);
+
+	traits.addCheckColTrait({
+		singles: ["player"],
+	})(that);
 
 	traits.addOubTrait({
 		oubArea: [-90, 0, 780, 260]	
@@ -45,6 +50,11 @@ const enemy = ({ pos, size, health, color }) => {
 		}
 	}
 
+	that.playerCol = (player) => {
+		player.hit = true;
+		player.hitFromX = that.velocity.x;
+	}
+
 	that.addMethods("AI", "handleHit");
 
 	return that;
@@ -59,14 +69,33 @@ export const smallWolf = (pos) => {
 	});
 
 	that.speed = 0.2;
+	that.dir = 0;
 
 	that.AI = () => {
-		if(that.center.x > 300)
-			that.acceleration.x = -that.speed;
-		else that.acceleration.x = that.speed;
+		that.acceleration.x = that.dir*that.speed;
 
 		if(that.hit) that.speed += 0.3;
 	}
+
+	let sheepCol = false;
+	that.grabbing;
+
+	that.grabSheep = ({ world: { sheep } }) => {
+		sheepCol = checkSetCol(that, sheep);
+
+		if(sheepCol && !sheepCol.grabbed && !that.grabbing){
+			that.grabbing = sheepCol;
+			that.dir *= -1;
+		}
+
+		if(that.grabbing){
+			that.grabbing.grabbed = true;
+			that.grabbing.grabbedPos.x = that.pos.x;
+			that.grabbing.grabbedPos.y = that.pos.y
+		}
+	}
+
+	that.addMethods("grabSheep");
 
 	return that;
 }
@@ -88,6 +117,7 @@ export const sniperWolf = (pos) => {
 			shotDelay: 1,
 			reloadTime: 1,
 			ammoCapacity: 1,
+			sound: "enemy_shoot",
 			bulletSpec: {
 				speed: 6,
 				spread: 2,
@@ -96,22 +126,22 @@ export const sniperWolf = (pos) => {
 			}}), 
 	})(that);
 
-	let waitCounter = 120;
+	that.dir = 0;
+	let waitCounter = 120 + Math.floor(Math.random()*60);
 	let walkCounter = 0;
 
-	that.AI = ({ world: { add, player } }) => {
+	that.AI = ({ world: { add, player }, audio }) => {
 		waitCounter--;
 		walkCounter--;
 
 		if(waitCounter === 0){
-			walkCounter = 60;
-			if(that.center.x < 300) that.acceleration.x = 0.15;
-			else that.acceleration.x = -0.15;
+			walkCounter = 30 + Math.floor(Math.random()*60);
+			that.acceleration.x = that.dir * 0.15;
 		}
 		if(walkCounter === 0){
 			waitCounter = 120;
 			that.acceleration.x = 0;
-			that.gun.shoot(that, add);
+			that.gun.shoot(that, add, audio);
 		}
 		that.aiming = v.pipe(
 			v.sub(that.gun.center, player.center),

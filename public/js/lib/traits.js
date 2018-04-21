@@ -91,9 +91,11 @@ export const addCheckColTrait = ({ singles = [], sets = [] }) => (that) => {
 	that.colSets = sets;
 	that.colSingles = singles;
     that.checkCol = (GAME) => {
-        singles.forEach(single => {
-            if(GAME.world[that.colSingle] && checkCol(that, GAME.world[that.colSingle]) && that[`${single}Col`]){
-                that[`${single}Col`](GAME.world[that.colSingle], GAME);
+        that.colSingles.forEach(single => {
+            if(GAME.world[single] 
+			&& checkCol(that, GAME.world[single]) 
+			&& that[`${single}Col`]){
+                that[`${single}Col`](GAME.world[single], GAME);
             }
         });
         that.colSets.forEach(set => {
@@ -278,3 +280,4 @@ export const addGunTrait = ({ gun, aiming = vec(0, 0) }) => (that) => {
 
 	that.addMethods("addGunToWorld", "handleGunPos");
 }
+

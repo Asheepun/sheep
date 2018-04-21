@@ -2,14 +2,15 @@ import vec, * as v 				from "/js/lib/vector.js";
 import traitHolder, * as traits from "/js/lib/traits.js";
 
 export const ammoBar = (pos) => {
-	const that = traitHolder();
-	that.pos = pos;
+	const that = traitHolder({
+		pos,
+	});
 
 	that.ammo;
 	that.reloadCounter;
 	that.ammoCapacity;
 
-	that.checkPlayerAmmo = ({ world: { player } }) => {
+	that.checkPlayerStatus = ({ world: { player } }) => {
 		that.ammo = player.gun.ammo;
 		that.reloadCounter = player.gun.reloadCounter;
 		that.ammoCapacity = player.gun.ammoCapacity;
@@ -30,7 +31,7 @@ export const ammoBar = (pos) => {
 		}
 	}
 
-	that.addMethods("checkPlayerAmmo");
+	that.addMethods("checkPlayerStatus");
 
 	return that;
 }

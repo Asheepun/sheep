@@ -42,7 +42,8 @@ const player = (pos) => {
 				size: vec(20, 11),
 				spread: 0.3,
 				friendly: true,
-			}
+			},
+			sound: "shoot",
 		})
 	})(that);
 
@@ -67,13 +68,22 @@ const player = (pos) => {
 		}
 	}
 
-	that.handleShooting = ({ world: { add, guns } }) => {
+	that.handleShooting = ({ world: { add, guns }, audio }) => {
 		if(that.velocity.x > 0) that.aiming.x = 1;
 		if(that.velocity.x < 0) that.aiming.x = -1;
-		if(that.shooting) that.gun.shoot(that, add);
+		if(that.shooting) that.gun.shoot(that, add, audio);
 	}
 
-	that.addMethods("handleControls", "handleShooting");
+	that.hit = false;
+	that.hitFromX = 0;
+
+	that.handleHit = () => {
+		if(that.hit){
+			that.hit = false;
+		}
+	}
+
+	that.addMethods("handleControls", "handleShooting", "handleHit");
 
 	return that;
 }
