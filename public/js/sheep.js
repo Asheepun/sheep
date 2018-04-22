@@ -22,6 +22,10 @@ const sheep = (pos) => {
 
 	traits.addColTrait({})(that);
 
+	traits.addOubTrait({
+		oubArea: [0, 0, 600, 300],
+	})(that);
+
 	that.grabbed = false;
 	that.grabbedPos = vec();
 
@@ -35,7 +39,19 @@ const sheep = (pos) => {
 		}
 	}
 
-	that.addMethods("handleGrabbedPos");
+	that.checkOub = () => {
+		if(that.pos.x > 600 || that.pos.x < -20)
+			that.hit = true;
+	}
+
+	that.handleHit = ({ world: { remove } }) => {
+		if(that.hit){
+			console.log("bäääh!");
+			remove(that);
+		}
+	}
+
+	that.addMethods("handleGrabbedPos", "checkOub", "handleHit");
 
 	return that;
 }

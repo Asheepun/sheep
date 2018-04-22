@@ -20,6 +20,8 @@ const gun = ({ pos, size, shotDelay, reloadTime, ammoCapacity, bulletSpec, sound
 		color: "grey",
 	})(that);
 
+	that.canShoot = true;
+
 	that.reloading = false;
 	that.shooting = false;
 	that.ammo = that.ammoCapacity;
@@ -27,7 +29,7 @@ const gun = ({ pos, size, shotDelay, reloadTime, ammoCapacity, bulletSpec, sound
 	let bulletVel;
 
 	that.shoot = (holder, add, audio) => {
-		if(!that.reloading && !that.shooting){
+		if(!that.reloading && !that.shooting && that.canShoot){
 			that.shooting = true;
 			that.shotDelayCounter = that.shotDelay;
 			
@@ -49,7 +51,7 @@ const gun = ({ pos, size, shotDelay, reloadTime, ammoCapacity, bulletSpec, sound
 	}
 
 	that.reload = () => {
-		if(!that.reloading){
+		if(!that.reloading && that.canShoot){
 			that.reloading = true;
 			that.reloadCounter = that.reloadTime;
 			that.ammo = 0;

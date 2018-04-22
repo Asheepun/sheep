@@ -26,10 +26,14 @@ const bullet = ({ pos, velocity, size, friendly }) => {
 
 	traits.addCheckColTrait({})(that);
 	if(that.friendly) that.colSets.push("enemies");
-	else that.colSingles.push("player");
+	else {
+		that.colSingles.push("player");
+		that.colSets.push("sheep");
+	}
 
-	that.enemiesCol = (enemy) => {
-		enemy.hit = true;
+	that.enemiesCol = that.playerCol = that.sheepCol = (entity) => {
+		entity.hit = true;
+		entity.hitVelocity = that.velocity.copy();
 		that.hit = true;
 	}
 

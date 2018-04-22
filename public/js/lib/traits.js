@@ -187,9 +187,11 @@ export const addPhysicsTrait = ({ acceleration = vec(0, 0), resistance = 1, grav
 	that.gravity = gravity;
 	
 	that.handlePhysics = () => {
-		that.acceleration.y += that.gravity;
-		that.velocity.add(that.acceleration);
-		that.velocity.mul(that.resistance);
+		if(that.canMove){
+			that.acceleration.y += that.gravity;
+			that.velocity.add(that.acceleration);
+			that.velocity.mul(that.resistance);
+		}
 	}
 	
 	that.addMethods("handlePhysics");

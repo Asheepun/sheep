@@ -68,6 +68,15 @@ export const smallWolf = (pos) => {
 		color: "grey",
 	});
 
+	traits.addCheckColTrait({
+		singles: ["player"],
+	})(that);
+
+	that.playerCol = (player) => {
+		player.hit = true;
+		player.hitVelocity = that.velocity.copy();
+	}
+
 	that.speed = 0.2;
 	that.dir = 0;
 

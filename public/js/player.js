@@ -48,15 +48,17 @@ const player = (pos) => {
 	})(that);
 
 	that.downing = false;
-
 	that.dir = 0;
+	that.controllable = true;
 
 	that.handleControls = () => {
-		that.acceleration.x = that.dir*0.9;
+		if(that.controllable){
+			that.acceleration.x = that.dir*0.9;
+		}
 	}
 
 	that.jump = () => {
-		if(that.onGround){
+		if(that.onGround && that.controllable){
 			that.velocity.y = -10;
 			that.acceleration.y = -1.7;
 		}
@@ -69,13 +71,15 @@ const player = (pos) => {
 	}
 
 	that.handleShooting = ({ world: { add, guns }, audio }) => {
-		if(that.velocity.x > 0) that.aiming.x = 1;
-		if(that.velocity.x < 0) that.aiming.x = -1;
-		if(that.shooting) that.gun.shoot(that, add, audio);
+		if(that.gun.canShoot){
+			if(that.velocity.x > 0) that.aiming.x = 1;
+			if(that.velocity.x < 0) that.aiming.x = -1;
+			if(that.shooting) that.gun.shoot(that, add, audio);
+		}
 	}
 
 	that.hit = false;
-	that.hitFromX = 0;
+	that.hitVelocity = vec(0, 0);
 
 	that.handleHit = () => {
 		if(that.hit){
