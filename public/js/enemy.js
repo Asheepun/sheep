@@ -39,15 +39,18 @@ const enemy = ({ pos, size, health, color }) => {
 	that.health = health;
 	that.hit = false;
 
-	that.handleHit = ({ world: { remove } }) => {
+	that.handleHit = (GAME) => {
 		if(that.hit){
 			that.hit = false;
 			that.health--;
 		}
 
-		if(that.health <= 0){
-			remove(that);
-		}
+		if(that.health <= 0) that.die(GAME);
+	}
+
+	that.die = ({ world: { remove, player } }) => {
+		player.kills++;
+		remove(that);
 	}
 
 	that.playerCol = (player) => {
@@ -157,6 +160,12 @@ export const sniperWolf = (pos) => {
 			v.normalize,
 			v.reverse,
 		);
+	}
+
+	that.die = ({ world: { remove, player } }) => {
+		player.kills++;
+		remove(that);
+		remove(that.gun);
 	}
 
 	return that;

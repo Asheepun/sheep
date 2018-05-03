@@ -50,6 +50,7 @@ const player = (pos) => {
 	that.downing = false;
 	that.dir = 0;
 	that.controllable = true;
+	that.kills = 0;
 
 	that.handleControls = () => {
 		if(that.controllable){
@@ -83,11 +84,31 @@ const player = (pos) => {
 
 	that.handleHit = () => {
 		if(that.hit){
+			that.deadCounter = 120;
 			that.hit = false;
 		}
 	}
 
-	that.addMethods("handleControls", "handleShooting", "handleHit");
+	that.deadCounter = 0;
+
+	that.handleDead = () => {
+		that.deadCounter--;
+
+		if(that.deadCounter > 0){
+			that.pos.y = -100;
+			that.canMove = false;
+			that.gun.canShoot = false;
+		}
+
+		if(that.deadCounter === 0){
+			that.pos.y = 120;
+			that.pos.x = 293;
+			that.canMove = true;
+			that.gun.canShoot = true;
+		}
+	}
+
+	that.addMethods("handleControls", "handleShooting", "handleHit", "handleDead");
 
 	return that;
 }

@@ -5,7 +5,7 @@ import vec, * as v   			 from "/js/lib/vector.js";
 import keyBinder     			 from "/js/lib/keyBinder.js";
 import * as loaders  			 from "/js/lib/assets.js";
 import generateWorld 			 from "/js/generateWorld.js"
-import spawner 		 			 from "/js/spawner.js";
+import spawnHandler 			 from "/js/spawnHandler.js";
 import * as hud 				 from "/js/hud.js";
 import sheep 					 from "/js/sheep.js";
 
@@ -62,33 +62,31 @@ Promise.all([
 	GAME.world.add(hud.ammoBar(vec(5, 5)), "hud", 10);
 
 	//add spawners
-	GAME.world.add(spawner({
+	GAME.world.add({
 		pos: vec(-60, 210),
 		types: [smallWolf],
-		delay: 140,
 		dir: 1,
-	}), "spawners", 0);
+	}, "bottomSpawners", 0);
 
-	GAME.world.add(spawner({
+	GAME.world.add({
 		pos: vec(630, 210),
 		types: [smallWolf],
-		delay: 140,
 		dir: -1,
-	}), "spawners", 0);
+	}, "bottomSpawners", 0);
 
-	GAME.world.add(spawner({
+	GAME.world.add({
 		pos: vec(0, 0),	
 		types: [sniperWolf],
-		delay: 900,
 		dir: 1,
-	}), "spawners", 0)
+	}, "topSpawners", 0)
 
-	GAME.world.add(spawner({
+	GAME.world.add({
 		pos: vec(580, 0),	
 		types: [sniperWolf],
-		delay: 900,
 		dir: -1,
-	}), "spawners", 0)
+	}, "topSpawners", 0)
+
+	GAME.world.add(spawnHandler(), "spawnHandler", 0, true);
 
 	const keys = keyBinder();
 
