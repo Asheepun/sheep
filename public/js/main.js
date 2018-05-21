@@ -8,6 +8,7 @@ import generateWorld 			 from "/js/generateWorld.js"
 import spawnHandler 			 from "/js/spawnHandler.js";
 import * as hud 				 from "/js/hud.js";
 import sheep 					 from "/js/sheep.js";
+import clock					 from "/js/clock.js";
 
 Promise.all([
 	getCanvas(600, 300),
@@ -60,6 +61,8 @@ Promise.all([
 
 	//add hud
 	GAME.world.add(hud.ammoBar(vec(5, 5)), "hud", 10);
+
+	GAME.world.add(clock(), "hud", 10);
 
 	//add spawners
 	GAME.world.add({
@@ -125,7 +128,7 @@ Promise.all([
 		down: GAME.world.player.gun.reload,
 	});
 
-	GAME.states.game = () => {
+	GAME.states.night = () => {
 		GAME.world.update(GAME);
 
 		ctx.save();
@@ -141,7 +144,7 @@ Promise.all([
 	
 	}
 
-	GAME.state = GAME.states.game;
+	GAME.state = GAME.states.night;
 
 	const loop = () => {
 		if(!document.hasFocus()) GAME.state = GAME.states.pause;
