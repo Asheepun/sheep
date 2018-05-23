@@ -2,7 +2,7 @@ import getCanvas     			 from "/js/lib/canvas.js";
 import getWorld      			 from "/js/lib/gameWorld.js";
 import { smallWolf, sniperWolf } from "/js/enemy.js";
 import vec, * as v   			 from "/js/lib/vector.js";
-import keyBinder     			 from "/js/lib/keyBinder.js";
+import keys		     			 from "/js/lib/keys.js";
 import * as loaders  			 from "/js/lib/assets.js";
 import generateWorld 			 from "/js/generateWorld.js"
 import spawnHandler 			 from "/js/spawnHandler.js";
@@ -62,7 +62,7 @@ Promise.all([
 	//add hud
 	GAME.world.add(hud.ammoBar(vec(5, 5)), "hud", 10);
 
-	GAME.world.add(clock(), "hud", 10);
+	GAME.world.add(clock(vec(210, 17)), "hud", 10);
 
 	//add spawners
 	GAME.world.add({
@@ -91,8 +91,23 @@ Promise.all([
 
 	GAME.world.add(spawnHandler(), "spawnHandler", 0, true);
 
-	const keys = keyBinder();
+	GAME.keys = keys(
+		"D",
+		"d",
+		"A",
+		"a",
+		"W",
+		"w",
+		" ",
+		"S",
+		"s",
+		"O",
+		"o",
+		"P",
+		"p",
+	);
 
+	/*
 	keys.bind({
 		keys: ["D", "d"],	
 		down: () => GAME.world.player.dir++,
@@ -127,8 +142,40 @@ Promise.all([
 		keys: ["P", "p"],
 		down: GAME.world.player.gun.reload,
 	});
+	*/
 
 	GAME.states.night = () => {
+
+		//keys
+		if(GAME.keys.W.downed || GAME.keys.w.downed || GAME.keys[" "].downed){
+			console.log("JEUMMP")
+			GAME.world.player.jump();
+		}
+		if(GAME.keys.W.upped || GAME.keys.w.upped || GAME.keys[" "].upped){
+			GAME.world.player.stopJump();
+		}
+		if(GAME.keys.A.down || GAME.keys.a.down){
+			console.log("CHECK")
+			GAME.world.player.dir = -1;
+		}
+		if(GAME.keys.D.down || GAME.keys.d.down){
+			GAME.world.player.dir = 1;
+		}
+		if(GAME.keys.D.down && GAME.keys.d.down
+		&& GAME.keys.A.down && GAME.keys.a.down
+		|| !GAME.keys.D.down && !GAME.keys.d.down
+		&& !GAME.keys.A.down && !GAME.keys.a.down){
+			GAME.world.player.dir = 0;
+		}
+		if(GAME.keys.O.down || GAME.keys.o.down){
+			GAME.world.player.shooting = true;
+		}else{
+			GAME.world.player.shooting = false;
+		}
+		if(GAME.keys.P.downed || GAME.keys.p.downed){
+			GAME.world.player.gun.reload();
+		}
+
 		GAME.world.update(GAME);
 
 		ctx.save();
@@ -149,6 +196,7 @@ Promise.all([
 	const loop = () => {
 		if(!document.hasFocus()) GAME.state = GAME.states.pause;
 		GAME.state(GAME);
+		GAME.keys.update();
 		setTimeout(loop, 1000/60);
 	}
 
