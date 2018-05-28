@@ -3,7 +3,7 @@ import vec, * as v 				from "/js/lib/vector.js";
 import gun 						from "/js/gun.js";
 import { checkSetCol } 			from "/js/lib/colission.js";
 
-const enemy = ({ pos, size, health, color }) => {
+const enemy = ({ pos, size, health, color, img, imgSize }) => {
 	const that = traitHolder(); 
 
 	traits.addEntityTrait({
@@ -12,7 +12,9 @@ const enemy = ({ pos, size, health, color }) => {
 	})(that);
 
 	traits.addSpriteTrait({
-		color,	
+		color,
+		img,
+		imgSize,
 	})(that);
 
 	traits.addMoveTrait({})(that);
@@ -43,9 +45,19 @@ const enemy = ({ pos, size, health, color }) => {
 		if(that.hit){
 			that.hit = false;
 			that.health--;
+			that.velocity.add(v.pipe(
+				that.hitVelocity,
+				v.normalize,
+				x => v.mul(x, 5),
+			));
+
+			if(that.health > 0) GAME.audio.play("hit");
 		}
 
-		if(that.health <= 0) that.die(GAME);
+		if(that.health <= 0){
+			that.die(GAME);
+			GAME.audio.play("kill");
+		}
 	}
 
 	that.die = ({ world: { remove, player } }) => {
@@ -63,12 +75,13 @@ const enemy = ({ pos, size, health, color }) => {
 	return that;
 }
 
-export const smallWolf = (pos) => {
+export const wolf = (pos) => {
 	const that = enemy({
 		pos,
 		size: vec(18, 20),
 		health: 2,
-		color: "grey",
+		img: "wolf",
+		imgSize: vec(18, 20),
 	});
 
 	traits.addCheckColTrait({
@@ -107,17 +120,23 @@ export const smallWolf = (pos) => {
 		}
 	}
 
-	that.addMethods("grabSheep");
+	that.animate = () => {
+		if(that.dir > 0) that.facing.x = 1;
+		if(that.dir < 0) that.facing.x = -1;
+	}
+
+	that.addMethods("grabSheep", "animate");
 
 	return that;
 }
 
-export const sniperWolf = (pos) => {
+export const squirrel = (pos) => {
 	const that = enemy({
 		pos,
-		size: vec(15, 14),
+		size: vec(15, 20),
 		health: 2,
-		color: "darkgrey"
+		img: "squirrel",
+		imgSize: vec(15, 20),
 	});
 
 	traits.addPlatformColTrait({})(that);
@@ -133,7 +152,7 @@ export const sniperWolf = (pos) => {
 			bulletSpec: {
 				speed: 6,
 				spread: 2,
-				color: "orange",
+				img: "bullet",
 				size: vec(20, 10),
 			}}), 
 	})(that);
@@ -167,6 +186,13 @@ export const sniperWolf = (pos) => {
 		remove(that);
 		remove(that.gun);
 	}
+
+	that.animate = () => {
+		if(that.dir > 0) that.facing.x = 1;
+		if(that.dir < 0) that.facing.x = -1;
+	}
+
+	that.addMethods("animate");
 
 	return that;
 }

@@ -10,7 +10,8 @@ const sheep = (pos) => {
 	})(that);
 
 	traits.addSpriteTrait({
-		color: "white"	
+		img: "sheep",
+		imgSize: that.size.copy(),
 	})(that);
 
 	traits.addMoveTrait({})(that);

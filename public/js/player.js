@@ -7,11 +7,12 @@ const player = (pos) => {
 
 	traits.addEntityTrait({
 		pos,
-		size: vec(15, 20)
+		size: vec(16, 20)
 	})(that);
 
 	traits.addSpriteTrait({
-		color: "white"	
+		img: "player",
+		imgSize: that.size.copy(),
 	})(that);
 
 	traits.addMoveTrait({})(that);
@@ -38,7 +39,7 @@ const player = (pos) => {
 			reloadTime: 180,
 			bulletSpec: {
 				speed: 15,
-				color: "yellow",
+				img: "bullet",
 				size: vec(20, 11),
 				spread: 0.3,
 				friendly: true,
@@ -108,7 +109,12 @@ const player = (pos) => {
 		}
 	}
 
-	that.addMethods("handleControls", "handleShooting", "handleHit", "handleDead");
+	that.animate = () => {
+		if(that.dir > 0) that.facing.x = 1;
+		if(that.dir < 0) that.facing.x = -1;
+	}
+
+	that.addMethods("handleControls", "handleShooting", "handleHit", "handleDead", "animate");
 
 	return that;
 }

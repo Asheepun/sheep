@@ -1,7 +1,7 @@
 import traitHolder, * as traits from "/js/lib/traits.js";
 import vec, * as v 				from "/js/lib/vector.js";
 
-const bullet = ({ pos, velocity, size, friendly }) => {
+const bullet = ({ pos, velocity, size, friendly, img }) => {
 	const that = traitHolder(); 
 
 	that.friendly = friendly;
@@ -12,8 +12,9 @@ const bullet = ({ pos, velocity, size, friendly }) => {
 	})(that);
 
 	traits.addSpriteTrait({
-		color: "yellow",	
 		rotation: v.angle(vec(0, 0), velocity) - 4.7,
+		img,
+		imgSize: that.size.copy(),
 	})(that);
 
 	traits.addMoveTrait({

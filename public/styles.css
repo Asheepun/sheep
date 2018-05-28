@@ -3,3 +3,8 @@
 	padding:0px;
 	text-align:center;
 }
+
+@font-face{
+    font-family: "game";
+    src: url("/game.ttf");
+}

@@ -1,6 +1,6 @@
 import getCanvas     			 from "/js/lib/canvas.js";
 import getWorld      			 from "/js/lib/gameWorld.js";
-import { smallWolf, sniperWolf } from "/js/enemy.js";
+import { wolf, squirrel } 		 from "/js/enemy.js";
 import vec, * as v   			 from "/js/lib/vector.js";
 import keys		     			 from "/js/lib/keys.js";
 import * as loaders  			 from "/js/lib/assets.js";
@@ -16,8 +16,23 @@ Promise.all([
 		0.3,
 		"shoot",
 		"enemy_shoot",
-	)
-]).then(([ { c, ctx, pointer, width, height }, audio ]) => {
+		"hit",
+		"kill",
+	),
+	loaders.loadSprites(
+		"player",
+		"gun",
+		"gun2",
+		"wolf",
+		"sheep",
+		"bullet",
+		"squirrel",
+		"platform",
+		"grass",
+		"obstacle",
+		"background",
+	),
+]).then(([ { c, ctx, pointer, width, height }, audio, sprites ]) => {
 
 	audio.setVolume();
 	
@@ -28,6 +43,7 @@ Promise.all([
 		width,
 		height,
 		audio,
+		sprites,
 		world: getWorld(),
 		state: undefined,
 		states: {
@@ -42,10 +58,10 @@ Promise.all([
 		"..............................",
 		"______________________________",
 		"..............................",
-		"..............................",
+		"..............@...............",
 		"..............................",
 		".........._________...........",
-		"...@..........................",
+		"..............................",
 		"..............................",
 		"..............................",
 		"..............................",
@@ -107,25 +123,25 @@ Promise.all([
 		//add spawners
 		GAME.world.add({
 			pos: vec(-60, 210),
-			types: [smallWolf],
+			types: [wolf],
 			dir: 1,
 		}, "bottomSpawners", 0);
 
 		GAME.world.add({
 			pos: vec(630, 210),
-			types: [smallWolf],
+			types: [wolf],
 			dir: -1,
 		}, "bottomSpawners", 0);
 
 		GAME.world.add({
 			pos: vec(0, 0),	
-			types: [sniperWolf],
+			types: [squirrel],
 			dir: 1,
 		}, "topSpawners", 0)
 
 		GAME.world.add({
 			pos: vec(580, 0),	
-			types: [sniperWolf],
+			types: [squirrel],
 			dir: -1,
 		}, "topSpawners", 0)
 
@@ -178,9 +194,8 @@ Promise.all([
 
 		ctx.save();
 		ctx.scale(c.scale, c.scale)
-		ctx.fillStyle = "black";
-		ctx.fillRect(0, 0, width, height)
-		GAME.world.draw(ctx, GAME);
+		ctx.drawImage(GAME.sprites.background, 0, 0, GAME.width, GAME.height)
+		GAME.world.draw(ctx, sprites);
 		ctx.restore();
 
 	}

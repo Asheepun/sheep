@@ -205,6 +205,7 @@ export const addSpriteTrait = ({ color, img, alpha = 1, rotation = 0, visible = 
     that.visible = visible;
     that.imgPos = imgPos;
     that.imgSize = imgSize;
+	that.facing = vec(1, 1);
 
     that.draw = (ctx, sprites) => {
         if(that.visible){
@@ -213,12 +214,15 @@ export const addSpriteTrait = ({ color, img, alpha = 1, rotation = 0, visible = 
             ctx.rotate(that.rotation);
             ctx.globalAlpha = that.alpha;
             ctx.fillStyle = that.color;
-            if(color)ctx.fillRect(-that.size.x/2, -that.size.y/2, that.size.x, that.size.y);
-            if(img)ctx.drawImage(
-                sprites[that.img],
-                that.imgPos.x, that.imgPos.y, that.imgSize.x, that.imgSize.y,
-                -that.size.x/2, -that.size.y/2, that.size.x, that.size.y
-            );
+            if(that.color) ctx.fillRect(-that.size.x/2, -that.size.y/2, that.size.x, that.size.y);
+            if(that.img){
+				ctx.scale(that.facing.x, that.facing.y);
+				ctx.drawImage(
+					sprites[that.img],
+					that.imgPos.x, that.imgPos.y, that.imgSize.x, that.imgSize.y,
+					-that.size.x/2, -that.size.y/2, that.size.x, that.size.y
+				);
+			}
             ctx.globalApha = 1;
             ctx.restore();
         }
@@ -278,6 +282,10 @@ export const addGunTrait = ({ gun, aiming = vec(0, 0) }) => (that) => {
 			x => v.add(x, v.mul(that.aiming, that.size.x/2))
 		);
 		that.gun.rotation = v.angle(vec(0, 0), that.aiming) - 4.7;
+
+		if(that.aiming.x > 0)
+			that.gun.facing.y = -1;
+		else that.gun.facing.y = 1;
 	}
 
 	that.addMethods("addGunToWorld", "handleGunPos");

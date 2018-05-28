@@ -17,7 +17,8 @@ const gun = ({ pos, size, shotDelay, reloadTime, ammoCapacity, bulletSpec, sound
 	})(that);
 
 	traits.addSpriteTrait({
-		color: "grey",
+		img: "gun2",
+		imgSize: that.size.copy(),
 	})(that);
 
 	that.canShoot = true;
