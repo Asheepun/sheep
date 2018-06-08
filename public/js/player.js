@@ -35,7 +35,7 @@ const player = (pos) => {
 			pos: that.pos.copy(),
 			size: vec(20, 11),
 			ammoCapacity: 20,
-			shotDelay: 15,
+			shotDelay: 8,
 			reloadTime: 180,
 			bulletSpec: {
 				speed: 15,

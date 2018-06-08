@@ -29,9 +29,9 @@ export const addOubTrait = ({ oubArea = [0, 0, 900, 600], bounce = false }) => (
 
     that.handleOubX = () => {
         if(that.velocity.x > 0)
-            that.pos.x = oubArea[0] + oubArea[2] - that.size.x;
+            that.pos.x = that.oubArea[0] + that.oubArea[2] - that.size.x;
         else
-            that.pos.x = oubArea[0];
+            that.pos.x = that.oubArea[0];
         if(bounce) that.velocity.x *= -1;
     }
     that.handleOubY = () => {

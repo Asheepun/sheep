@@ -145,7 +145,7 @@ Promise.all([
 			dir: -1,
 		}, "topSpawners", 0)
 
-		GAME.world.add(spawnHandler(), "spawnHandler", 0, true);
+		//GAME.world.add(spawnHandler(), "spawnHandler", 0, true);
 
 		GAME.state = GAME.states.night;
 	}

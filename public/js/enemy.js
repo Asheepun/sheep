@@ -157,6 +157,8 @@ export const squirrel = (pos) => {
 			}}), 
 	})(that);
 
+	that.oubArea = [0, 0, 600, 300];
+
 	that.dir = 0;
 	let waitCounter = 120 + Math.floor(Math.random()*60);
 	let walkCounter = 0;
