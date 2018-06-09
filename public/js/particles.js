@@ -47,7 +47,7 @@ const particle = ({ pos, size, velocity, img, imgSize, fade = 0, gravity }) => {
 	}
 
 	that.checkPerformance = ({ world: { particles } }) => {
-		if(particles.length > 30 && particles.filter(p => p.fade === 0).length > 30){
+		if(that.fade === 0 && particles.length > 30 && particles.filter(p => p.fade === 0).length > 30){
 			that.fade = 0.01;
 		}
 	}

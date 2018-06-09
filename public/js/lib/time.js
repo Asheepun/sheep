@@ -13,8 +13,10 @@ export const getTime = (count, seconds = 0, minutes = 0) => {
 	};
 }
 
-export const getClockText = ({ seconds, minutes }) => {
+export const getClockText = ({ seconds, minutes }, secondsDist = 1) => {
 	let text = "";
+
+	console.log("CHECK");
 
 	if(minutes < 10)
 		text += "0";
@@ -25,7 +27,7 @@ export const getClockText = ({ seconds, minutes }) => {
 	if(seconds < 10)
 		text += "0";
 
-	text += seconds;
+	text += Math.floor(seconds/secondsDist)*secondsDist;
 
 	return text;
 }

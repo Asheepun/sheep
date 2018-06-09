@@ -37,6 +37,8 @@ Promise.all([
 		"obstacle",
 		"background",
 		"blood_particle",
+		"ammobar",
+		"ammo",
 	),
 ]).then(([ { c, ctx, pointer, width, height }, audio, sprites ]) => {
 
@@ -83,10 +85,10 @@ Promise.all([
 		ctx.fillStyle = "black";
 		ctx.fillRect(0, 0, GAME.width, GAME.height)
 		ctx.fillStyle = "white";
-		ctx.font = "15px Arial";
+		ctx.font = "15px game";
 		ctx.fillText("Move with WASD", 215, 100);
 		ctx.fillText("Shoot with O Reload with P", 182, 130);
-		ctx.font = "20px Arial";
+		ctx.font = "20px game";
 		ctx.fillText("Press space to begin", 180, 200);
 		ctx.restore();
 
@@ -187,6 +189,10 @@ Promise.all([
 		ctx.save();
 		ctx.scale(c.scale, c.scale)
 		ctx.drawImage(GAME.sprites.background, 0, 0, GAME.width, GAME.height)
+		ctx.fillStyle = "black";
+		ctx.globalAlpha = 0.3;
+		ctx.fillRect(0, 0, c.width, c.height),
+		ctx.globalAlhpa = 1;
 		GAME.world.draw(ctx, sprites);
 		ctx.restore();
 
@@ -202,7 +208,7 @@ Promise.all([
 		ctx.save();
 		ctx.scale(c.scale, c.scale);
 		ctx.fillStyle = "white";
-		ctx.font = "40px Arial";
+		ctx.font = "40px game";
 		ctx.fillText("Paused", 217, 150);
 		ctx.font = "20px Arial";
 		ctx.fillText("Press space to continue", 173, 200);

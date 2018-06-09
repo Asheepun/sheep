@@ -5,6 +5,7 @@ const createCanvas = (width = 800, height = 600, element = document.body) => new
     const ctx = c.getContext("2d");
     ctx.webkitImageSmoothingEnabled = false;
     ctx.mozImageSmoothingEnabled = false;    
+	ctx.imageSmoothingEnabled = false;
 
     //fix canvas size
     const dif = height/width;
@@ -12,7 +13,7 @@ const createCanvas = (width = 800, height = 600, element = document.body) => new
     const reSize  = () => {
         c.width = window.innerWidth-10;
         c.height = c.width*dif;
-        while(c.height > window.innerHeight-10 && c.width === Math.floor(c.width) && c.height === Math.floor(c.height)){
+        while(c.height > window.innerHeight-10 && c.width % 2 === 0 && c.height % 2 === 0){
             c.width -= 2;
             c.height = c.width*dif;
         }

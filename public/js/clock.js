@@ -15,7 +15,7 @@ const clock = (pos) => {
 	that.draw = (ctx) => {
 
 		ctx.fillStyle = "white";
-		ctx.fillText(time.getClockText(time.getTime(that.count)), that.pos.x, that.pos.y);
+		ctx.fillText(time.getClockText(time.getTime(that.count), 10), that.pos.x, that.pos.y);
 	}
 
 	that.addMethods("tick");
