@@ -9,6 +9,7 @@ import spawnHandler 			 from "/js/spawnHandler.js";
 import * as hud 				 from "/js/hud.js";
 import sheep 					 from "/js/sheep.js";
 import clock					 from "/js/clock.js";
+import * as obstacles 			 from "/js/obstacles.js";
 
 Promise.all([
 	getCanvas(600, 300),
@@ -22,15 +23,19 @@ Promise.all([
 	loaders.loadSprites(
 		"player",
 		"gun",
-		"gun2",
 		"wolf",
 		"sheep",
 		"bullet",
+		"enemy_bullet",
 		"squirrel",
 		"platform",
+		"top_platform",
+		"bottom_platform",
+		"ground",
 		"grass",
 		"obstacle",
 		"background",
+		"blood_particle",
 	),
 ]).then(([ { c, ctx, pointer, width, height }, audio, sprites ]) => {
 
@@ -56,17 +61,17 @@ Promise.all([
 		"..............................",
 		"..............................",
 		"..............................",
-		"______________________________",
+		"..............................",
 		"..............................",
 		"..............@...............",
 		"..............................",
-		".........._________...........",
 		"..............................",
 		"..............................",
 		"..............................",
 		"..............................",
-		"##############################",
-		"##############################",
+		"..............................",
+		"..............................",
+		"..............................",
 	];
 
 
@@ -108,9 +113,16 @@ Promise.all([
 	GAME.states.setup = () => {
 		GAME.world.clearAll();
 		
-		//add tiles and player
+		//add platforms and ground
+		GAME.world.add(obstacles.topPlatform(vec(0, 80)), "platforms", 2);
+		GAME.world.add(obstacles.bottomPlatfrom(vec(200, 160)), "platforms", 2);
+		GAME.world.add(obstacles.ground(vec(0, 280)), "obstacles", 2)
+		GAME.world.add(obstacles.grass(vec(0, 260)), "obstacles", 2)
+		
+		//add player
 		generateWorld(map, GAME.world);
 
+		//add sheep
 		for(let i = 0; i < 3; i++){
 			GAME.world.add(sheep(vec(240 + i*40, 240)), "sheep", 3);
 		}
@@ -145,7 +157,7 @@ Promise.all([
 			dir: -1,
 		}, "topSpawners", 0)
 
-		//GAME.world.add(spawnHandler(), "spawnHandler", 0, true);
+		GAME.world.add(spawnHandler(), "spawnHandler", 0, true);
 
 		GAME.state = GAME.states.night;
 	}

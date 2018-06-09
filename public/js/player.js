@@ -40,7 +40,7 @@ const player = (pos) => {
 			bulletSpec: {
 				speed: 15,
 				img: "bullet",
-				size: vec(20, 11),
+				size: vec(11, 7),
 				spread: 0.3,
 				friendly: true,
 			},

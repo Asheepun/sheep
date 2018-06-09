@@ -2,13 +2,14 @@ import traitHolder, * as traits from "/js/lib/traits.js";
 import vec, * as v 				from "/js/lib/vector.js";
 import bullet					from "/js/bullet.js";
 
-const gun = ({ pos, size, shotDelay, reloadTime, ammoCapacity, bulletSpec, sound }) => {
+const gun = ({ pos, size, shotDelay, reloadTime, ammoCapacity, bulletSpec, sound, knockback }) => {
 	const that = traitHolder({
 		shotDelay,
 		reloadTime,
 		ammoCapacity,
 		bulletSpec,
 		sound,
+		knockback,
 	});
 	
 	traits.addEntityTrait({
@@ -17,7 +18,7 @@ const gun = ({ pos, size, shotDelay, reloadTime, ammoCapacity, bulletSpec, sound
 	})(that);
 
 	traits.addSpriteTrait({
-		img: "gun2",
+		img: "gun",
 		imgSize: that.size.copy(),
 	})(that);
 
@@ -38,7 +39,7 @@ const gun = ({ pos, size, shotDelay, reloadTime, ammoCapacity, bulletSpec, sound
 			if(that.ammo <= 0) that.reload();
 
 			//make bullet
-			bulletPos = that.pos.copy();
+			bulletPos = v.add(that.pos, v.mul(holder.aiming, that.size.x / 2));
 			bulletVel = v.mul(holder.aiming, bulletSpec.speed)
 			.add(v.rVec(-bulletSpec.spread/2, bulletSpec.spread));
 

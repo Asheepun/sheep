@@ -2,6 +2,7 @@ import traitHolder, * as traits from "/js/lib/traits.js";
 import vec, * as v 				from "/js/lib/vector.js";
 import gun 						from "/js/gun.js";
 import { checkSetCol } 			from "/js/lib/colission.js";
+import * as particleEffects 	from "/js/particles.js";
 
 const enemy = ({ pos, size, health, color, img, imgSize }) => {
 	const that = traitHolder(); 
@@ -52,6 +53,12 @@ const enemy = ({ pos, size, health, color, img, imgSize }) => {
 			));
 
 			if(that.health > 0) GAME.audio.play("hit");
+
+			particleEffects.bloodEffect({
+				pos: that.center.copy(),
+				dir: v.normalize(v.reverse(that.hitVelocity)),
+				world: GAME.world,
+			})
 		}
 
 		if(that.health <= 0){
@@ -152,7 +159,7 @@ export const squirrel = (pos) => {
 			bulletSpec: {
 				speed: 6,
 				spread: 2,
-				img: "bullet",
+				img: "enemy_bullet",
 				size: vec(20, 10),
 			}}), 
 	})(that);

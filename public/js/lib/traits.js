@@ -262,7 +262,7 @@ export const addAnimationTrait = ({ frames, delay }) => (that) => {
     that.addMethods("handleState", "animate");
 }
 
-export const addGunTrait = ({ gun, aiming = vec(0, 0) }) => (that) => {
+export const addGunTrait = ({ gun, aiming = vec(1, 0) }) => (that) => {
 	that.gun = gun;
 	that.aiming = aiming;
 
