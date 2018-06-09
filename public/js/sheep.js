@@ -6,7 +6,7 @@ const sheep = (pos) => {
 
 	traits.addEntityTrait({
 		pos,
-		size: vec(20, 17)
+		size: vec(20, 13)
 	})(that);
 
 	traits.addSpriteTrait({

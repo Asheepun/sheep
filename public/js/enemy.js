@@ -1,11 +1,13 @@
-import traitHolder, * as traits from "/js/lib/traits.js";
-import vec, * as v 				from "/js/lib/vector.js";
-import gun 						from "/js/gun.js";
-import { checkSetCol } 			from "/js/lib/colission.js";
-import * as particleEffects 	from "/js/particles.js";
+import traitHolder, * as traits 		from "/js/lib/traits.js";
+import vec, * as v 						from "/js/lib/vector.js";
+import gun 								from "/js/gun.js";
+import { checkSetCol } 					from "/js/lib/colission.js";
+import particle, * as particleEffects 	from "/js/particles.js";
 
-const enemy = ({ pos, size, health, color, img, imgSize }) => {
+const enemy = ({ pos, size, health, color, img, imgSize, corpseSize }) => {
 	const that = traitHolder(); 
+
+	that.corpseSize = corpseSize,
 
 	traits.addEntityTrait({
 		pos,
@@ -58,12 +60,21 @@ const enemy = ({ pos, size, health, color, img, imgSize }) => {
 				pos: that.center.copy(),
 				dir: v.normalize(v.reverse(that.hitVelocity)),
 				world: GAME.world,
-			})
+			});
 		}
 
 		if(that.health <= 0){
 			that.die(GAME);
 			GAME.audio.play("kill");
+
+			GAME.world.add(particle({
+				pos: that.pos.copy(),
+				size: that.corpseSize,
+				velocity: vec(v.normalize(that.hitVelocity).x * 2, -0.5),
+				img: that.img + "_corpse",
+				imgSize: that.corpseSize,
+				gravity: 0.1,
+			}), "particles", 4);
 		}
 	}
 
@@ -89,6 +100,7 @@ export const wolf = (pos) => {
 		health: 2,
 		img: "wolf",
 		imgSize: vec(18, 20),
+		corpseSize: vec(20, 11),
 	});
 
 	traits.addCheckColTrait({
@@ -143,7 +155,8 @@ export const squirrel = (pos) => {
 		size: vec(15, 20),
 		health: 2,
 		img: "squirrel",
-		imgSize: vec(15, 20),
+		imgSize: vec(17, 20),
+		corpseSize: vec(20, 9),
 	});
 
 	traits.addPlatformColTrait({})(that);

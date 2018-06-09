@@ -46,13 +46,18 @@ const particle = ({ pos, size, velocity, img, imgSize, fade = 0, gravity }) => {
 		}
 	}
 
-	that.checkPerformance = ({ world: { remove, particles } }) => {
+	that.checkPerformance = ({ world: { particles } }) => {
 		if(particles.length > 30 && particles.filter(p => p.fade === 0).length > 30){
 			that.fade = 0.01;
 		}
 	}
 
-	that.addMethods("fadeOut", "checkPerformance");
+	that.animate = () => {
+		if(that.velocity.x > 0) that.facing.x = 1;
+		if(that.velocity.x < 0) that.facing.x = -1;
+	}
+
+	that.addMethods("fadeOut", "checkPerformance", "animate");
 
 	return that;
 }
@@ -76,3 +81,5 @@ export const bloodEffect = ({ pos, dir, world }) => {
 		
 	}
 }
+
+export default particle;

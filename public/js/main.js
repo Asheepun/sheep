@@ -4,11 +4,11 @@ import { wolf, squirrel } 		 from "/js/enemy.js";
 import vec, * as v   			 from "/js/lib/vector.js";
 import keys		     			 from "/js/lib/keys.js";
 import * as loaders  			 from "/js/lib/assets.js";
-import generateWorld 			 from "/js/generateWorld.js"
 import spawnHandler 			 from "/js/spawnHandler.js";
-import * as hud 				 from "/js/hud.js";
-import sheep 					 from "/js/sheep.js";
 import clock					 from "/js/clock.js";
+import * as hud 				 from "/js/hud.js";
+import player 					 from "/js/player.js";
+import sheep 					 from "/js/sheep.js";
 import * as obstacles 			 from "/js/obstacles.js";
 
 Promise.all([
@@ -23,16 +23,17 @@ Promise.all([
 	loaders.loadSprites(
 		"player",
 		"gun",
-		"wolf",
 		"sheep",
+		"wolf",
+		"squirrel",
+		"wolf_corpse",
+		"squirrel_corpse",
 		"bullet",
 		"enemy_bullet",
-		"squirrel",
 		"platform",
 		"top_platform",
 		"bottom_platform",
 		"ground",
-		"grass",
 		"obstacle",
 		"background",
 		"blood_particle",
@@ -55,25 +56,6 @@ Promise.all([
 		
 		},
 	};
-
-	const map = [
-		"..............................",
-		"..............................",
-		"..............................",
-		"..............................",
-		"..............................",
-		"..............................",
-		"..............@...............",
-		"..............................",
-		"..............................",
-		"..............................",
-		"..............................",
-		"..............................",
-		"..............................",
-		"..............................",
-		"..............................",
-	];
-
 
 	GAME.keys = keys(
 		"D",
@@ -116,13 +98,11 @@ Promise.all([
 		//add platforms and ground
 		GAME.world.add(obstacles.topPlatform(vec(0, 80)), "platforms", 2);
 		GAME.world.add(obstacles.bottomPlatfrom(vec(200, 160)), "platforms", 2);
-		GAME.world.add(obstacles.ground(vec(0, 280)), "obstacles", 2)
-		GAME.world.add(obstacles.grass(vec(0, 260)), "obstacles", 2)
+		GAME.world.add(obstacles.ground(vec(0, 260)), "obstacles", 2)
 		
-		//add player
-		generateWorld(map, GAME.world);
+		//add player and sheep
+		GAME.world.add(player(vec(285, 120)), "player", 6, true);
 
-		//add sheep
 		for(let i = 0; i < 3; i++){
 			GAME.world.add(sheep(vec(240 + i*40, 240)), "sheep", 3);
 		}
@@ -146,13 +126,13 @@ Promise.all([
 		}, "bottomSpawners", 0);
 
 		GAME.world.add({
-			pos: vec(0, 0),	
+			pos: vec(20, 0),	
 			types: [squirrel],
 			dir: 1,
 		}, "topSpawners", 0)
 
 		GAME.world.add({
-			pos: vec(580, 0),	
+			pos: vec(560, 0),	
 			types: [squirrel],
 			dir: -1,
 		}, "topSpawners", 0)

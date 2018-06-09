@@ -31,12 +31,6 @@ export const bottomPlatfrom = (pos) => obstacle({
 
 export const ground = (pos) => obstacle({
 	pos,
-	size: vec(600, 20),
+	size: vec(600, 40),
 	img: "ground",
-})
-
-export const grass = (pos) => obstacle({
-	pos,
-	size: vec(600, 20),
-	img: "grass",
-})
+});
