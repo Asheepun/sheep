@@ -75,7 +75,7 @@ export const combo = () => {
 	let countTimer = 0;
 	let lastCounter = 0;
 
-	that.count = ({ progress, audio: { play } }) => {
+	that.count = ({ world: { player, add }, progress, audio: { play } }) => {
 		countTimer--;
 		if(that.counter > lastCounter) countTimer = 70;
 
@@ -85,6 +85,7 @@ export const combo = () => {
 			for(let i = 0; i < that.counter; i++){
 				setTimeout(() => play("combo1"), 70*i);
 			}
+			add(coinText(10 * Math.pow(2, that.counter), vec(player.pos.x, player.pos.y)), "text", 10);
 			that.counter = 0;
 		}
 
@@ -100,6 +101,33 @@ export const combo = () => {
 	}
 	
 	that.addMethods("checkStatus", "count");
+
+	return that;
+}
+
+const coinText = (coins, pos) => {
+	const that = traitHolder();
+
+	traits.addEntityTrait({
+		pos,
+		size: vec(0, 0),
+	})(that);
+
+	traits.addMoveTrait({
+		velocity: vec(0, -1),
+	})(that);
+
+	let counter = 25;
+	that.deleteCounter = ({ world: { remove } }) => {
+		counter--;
+		if(counter <= 0) remove(that);
+	}
+
+	that.draw = (ctx) => {
+		text.white15("$" + coins, pos.x, pos.y, ctx);
+	}
+
+	that.addMethods("deleteCounter");
 
 	return that;
 }
