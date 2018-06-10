@@ -10,6 +10,8 @@ import * as hud 				 from "/js/hud.js";
 import player 					 from "/js/player.js";
 import sheep 					 from "/js/sheep.js";
 import * as obstacles 			 from "/js/obstacles.js";
+import shadow 					 from "/js/shadows.js";
+import bullet 					 from "/js/bullet.js";
 
 Promise.all([
 	getCanvas(600, 300),
@@ -115,6 +117,18 @@ Promise.all([
 
 		GAME.world.add(clock(vec(210, 17)), "hud", 10);
 
+		//add shadows
+		for(let i = 0; i < 10; i++){
+			for(let j = 0; j < 20; j++){
+				let pos = vec(j*30, i*30);
+				
+				GAME.world.add(shadow({
+					pos,
+					size: vec(30, 30),
+				}), "shadows", 9);
+			}
+		}
+
 		//add spawners
 		GAME.world.add({
 			pos: vec(-60, 210),
@@ -215,7 +229,7 @@ Promise.all([
 		ctx.fillStyle = "white";
 		ctx.font = "40px game";
 		ctx.fillText("Paused", 217, 150);
-		ctx.font = "20px Arial";
+		ctx.font = "20px game";
 		ctx.fillText("Press space to continue", 173, 200);
 		ctx.restore();
 	}
