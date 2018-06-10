@@ -41,10 +41,11 @@ const player = (pos) => {
 				speed: 15,
 				img: "bullet",
 				size: vec(11, 7),
-				spread: 0.3,
+				spread: 0.7,
 				friendly: true,
 			},
 			sound: "shoot",
+			screenshake: true,
 		})
 	})(that);
 
@@ -72,11 +73,11 @@ const player = (pos) => {
 		}
 	}
 
-	that.handleShooting = ({ world: { add, guns }, audio }) => {
+	that.handleShooting = ({ world: { add, guns }, audio, offset }) => {
 		if(that.gun.canShoot){
 			if(that.velocity.x > 0) that.aiming.x = 1;
 			if(that.velocity.x < 0) that.aiming.x = -1;
-			if(that.shooting) that.gun.shoot(that, add, audio);
+			if(that.shooting) that.gun.shoot(that, add, audio, offset);
 		}
 	}
 

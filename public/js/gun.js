@@ -2,7 +2,7 @@ import traitHolder, * as traits from "/js/lib/traits.js";
 import vec, * as v 				from "/js/lib/vector.js";
 import bullet					from "/js/bullet.js";
 
-const gun = ({ pos, size, shotDelay, reloadTime, ammoCapacity, bulletSpec, sound, knockback }) => {
+const gun = ({ pos, size, shotDelay, reloadTime, ammoCapacity, bulletSpec, sound, knockback, screenshake = false }) => {
 	const that = traitHolder({
 		shotDelay,
 		reloadTime,
@@ -30,7 +30,7 @@ const gun = ({ pos, size, shotDelay, reloadTime, ammoCapacity, bulletSpec, sound
 	let bulletPos;
 	let bulletVel;
 
-	that.shoot = (holder, add, audio) => {
+	that.shoot = (holder, add, audio, offset) => {
 		if(!that.reloading && !that.shooting && that.canShoot){
 			that.shooting = true;
 			that.shotDelayCounter = that.shotDelay;
@@ -49,6 +49,17 @@ const gun = ({ pos, size, shotDelay, reloadTime, ammoCapacity, bulletSpec, sound
 			})), "bullets", 3);
 
 			audio.play(that.sound);
+
+			//kickback
+			that.pos.sub(v.mul(holder.aiming, 6));
+
+			//knockback
+			holder.pos.sub(v.mul(holder.aiming, 3));
+
+			if(screenshake){
+				offset.x -= holder.aiming.x*Math.random()*3;
+				offset.y += Math.random()*2-1;
+			}
 		}
 	}
 

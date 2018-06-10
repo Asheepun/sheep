@@ -54,6 +54,7 @@ Promise.all([
 		sprites,
 		world: getWorld(),
 		state: undefined,
+		offset: vec(0, 0),
 		states: {
 		
 		},
@@ -187,6 +188,7 @@ Promise.all([
 		GAME.world.update(GAME);
 
 		ctx.save();
+		ctx.translate(GAME.offset.x, GAME.offset.y);
 		ctx.scale(c.scale, c.scale)
 		ctx.drawImage(GAME.sprites.background, 0, 0, GAME.width, GAME.height)
 		ctx.fillStyle = "black";
@@ -195,6 +197,9 @@ Promise.all([
 		ctx.globalAlhpa = 1;
 		GAME.world.draw(ctx, sprites);
 		ctx.restore();
+
+		GAME.offset.x = 0;
+		GAME.offset.y = 0;
 
 	}
 
