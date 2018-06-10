@@ -75,12 +75,16 @@ export const combo = () => {
 	let countTimer = 0;
 	let lastCounter = 0;
 
-	that.count = ({ progress }) => {
+	that.count = ({ progress, audio: { play } }) => {
 		countTimer--;
 		if(that.counter > lastCounter) countTimer = 70;
 
 		if(countTimer === 0){
 			progress.coins += 10 * Math.pow(2, that.counter);
+
+			for(let i = 0; i < that.counter; i++){
+				setTimeout(() => play("combo1"), 70*i);
+			}
 			that.counter = 0;
 		}
 

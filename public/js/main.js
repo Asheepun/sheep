@@ -24,6 +24,7 @@ Promise.all([
 		"enemy_shoot",
 		"hit",
 		"kill",
+		"combo1",
 	),
 	loaders.loadSprites(
 		"player",
@@ -48,6 +49,8 @@ Promise.all([
 ]).then(([ { c, ctx, pointer, width, height }, audio, sprites ]) => {
 
 	audio.setVolume();
+
+	audio.sounds.combo1.volume = 0.4;
 	
 	const GAME = {
 		c,
