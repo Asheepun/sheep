@@ -78,9 +78,11 @@ const enemy = ({ pos, size, health, color, img, imgSize, corpseSize }) => {
 		}
 	}
 
-	that.die = ({ world: { remove, player } }) => {
+	that.die = ({ world: { remove, combo, player }, progress }) => {
 		player.kills++;
+		combo.counter++;
 		remove(that);
+		if(that.gun) remove(that.gun);
 	}
 
 	that.playerCol = (player) => {
@@ -201,12 +203,6 @@ export const squirrel = (pos) => {
 			v.normalize,
 			v.reverse,
 		);
-	}
-
-	that.die = ({ world: { remove, player } }) => {
-		player.kills++;
-		remove(that);
-		remove(that.gun);
 	}
 
 	that.animate = () => {

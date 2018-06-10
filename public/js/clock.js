@@ -1,5 +1,6 @@
 import traitHolder, * as traits from "/js/lib/traits.js";
 import * as time 				from "/js/lib/time.js";
+import * as text 				from "/js/lib/text.js";
 
 const clock = (pos) => {
 	const that = traitHolder({
@@ -14,8 +15,7 @@ const clock = (pos) => {
 
 	that.draw = (ctx) => {
 
-		ctx.fillStyle = "white";
-		ctx.fillText(time.getClockText(time.getTime(that.count), 10), that.pos.x, that.pos.y);
+		text.white15(time.getClockText(time.getTime(that.count), 10), that.pos.x, that.pos.y, ctx);
 	}
 
 	that.addMethods("tick");

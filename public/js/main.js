@@ -5,6 +5,7 @@ import vec, * as v   			 from "/js/lib/vector.js";
 import keys		     			 from "/js/lib/keys.js";
 import * as loaders  			 from "/js/lib/assets.js";
 import spawnHandler 			 from "/js/spawnHandler.js";
+import handlePlayerKeys 		 from "/js/playerKeys.js";
 import clock					 from "/js/clock.js";
 import * as hud 				 from "/js/hud.js";
 import player 					 from "/js/player.js";
@@ -12,6 +13,8 @@ import sheep 					 from "/js/sheep.js";
 import * as obstacles 			 from "/js/obstacles.js";
 import shadow 					 from "/js/shadows.js";
 import bullet 					 from "/js/bullet.js";
+import * as text 				 from "/js/lib/text.js";
+import setupShop				 from "/js/shop.js";
 
 Promise.all([
 	getCanvas(600, 300),
@@ -58,8 +61,13 @@ Promise.all([
 		state: undefined,
 		offset: vec(0, 0),
 		states: {
-		
+			setupShop,
 		},
+		progress: {
+			coins: 0,
+			night: 0,
+			sheep: 3,
+		}
 	};
 
 	GAME.keys = keys(
@@ -80,24 +88,23 @@ Promise.all([
 
 	GAME.states.start = () => {
 		if(GAME.keys[" "].downed){
-			GAME.state = GAME.states.setup;
+			GAME.state = GAME.states.setupNight;
 		}
 
 		ctx.save();
 		ctx.scale(c.scale, c.scale)
 		ctx.fillStyle = "black";
 		ctx.fillRect(0, 0, GAME.width, GAME.height)
-		ctx.fillStyle = "white";
-		ctx.font = "15px game";
-		ctx.fillText("Move with WASD", 215, 100);
-		ctx.fillText("Shoot with O Reload with P", 182, 130);
-		ctx.font = "20px game";
-		ctx.fillText("Press space to begin", 180, 200);
+		text.white15("Move with WASD", 215, 100, ctx);
+		text.white15("Shoot with O reload with P", 182, 130, ctx);
+		text.white20("Press space to begin", 180, 200, ctx);
 		ctx.restore();
 
 	}
 
-	GAME.states.setup = () => {
+	GAME.states.setupNight = () => {
+		GAME.progress.night ++;
+
 		GAME.world.clearAll();
 		
 		//add platforms and ground
@@ -113,9 +120,13 @@ Promise.all([
 		}
 
 		//add hud
-		GAME.world.add(hud.ammoBar(vec(5, 5)), "hud", 10);
+		GAME.world.add(hud.ammoBar(vec(5, 5)), "ammobar", 10, true);
 
-		GAME.world.add(clock(vec(210, 17)), "hud", 10);
+		GAME.world.add(clock(vec(210, 17)), "clock", 10, true);
+
+		GAME.world.add(hud.coinCounter(vec(580, 17)), "coinCounter", 10, true);
+		
+		GAME.world.add(hud.combo(), "combo", 10, true);
 
 		//add shadows
 		for(let i = 0; i < 10; i++){
@@ -161,42 +172,11 @@ Promise.all([
 
 	GAME.states.night = () => {
 
-		//keys
-		
-		//jump
-		if(GAME.keys.W.downed || GAME.keys.w.downed || GAME.keys[" "].downed){
-			GAME.world.player.jump();
-		}
-		if(GAME.keys.W.upped || GAME.keys.w.upped || GAME.keys[" "].upped){
-			GAME.world.player.stopJump();
-		}
-		//move
-		if(GAME.keys.A.down || GAME.keys.a.down){
-			GAME.world.player.dir = -1;
-		}
-		if(GAME.keys.D.down || GAME.keys.d.down){
-			GAME.world.player.dir = 1;
-		}
-		if(GAME.keys.D.down && GAME.keys.d.down
-		&& GAME.keys.A.down && GAME.keys.a.down
-		|| !GAME.keys.D.down && !GAME.keys.d.down
-		&& !GAME.keys.A.down && !GAME.keys.a.down){
-			GAME.world.player.dir = 0;
-		}
-		if(GAME.keys.S.down || GAME.keys.s.down){
-			GAME.world.player.downing = true;
-		}else{
-			GAME.world.player.downing = false;
-		}
-		//shoot
-		if(GAME.keys.O.down || GAME.keys.o.down){
-			GAME.world.player.shooting = true;
-		}else{
-			GAME.world.player.shooting = false;
-		}
-		//reload
-		if(GAME.keys.P.downed || GAME.keys.p.downed){
-			GAME.world.player.gun.reload();
+		handlePlayerKeys(GAME);
+
+		//check time
+		if(GAME.world.clock.count > 60){
+//			GAME.state = GAME.states.setupShop;
 		}
 
 		GAME.world.update(GAME);
@@ -212,6 +192,7 @@ Promise.all([
 		GAME.world.draw(ctx, sprites);
 		ctx.restore();
 
+		//handle screenshake
 		GAME.offset.x = 0;
 		GAME.offset.y = 0;
 
@@ -226,11 +207,8 @@ Promise.all([
 
 		ctx.save();
 		ctx.scale(c.scale, c.scale);
-		ctx.fillStyle = "white";
-		ctx.font = "40px game";
-		ctx.fillText("Paused", 217, 150);
-		ctx.font = "20px game";
-		ctx.fillText("Press space to continue", 173, 200);
+		text.white40("Paused", 217, 150, ctx)
+		text.white20("Press space to continue", 173, 200, ctx)
 		ctx.restore();
 	}
 
@@ -243,7 +221,7 @@ Promise.all([
 			if(GAME.state !== GAME.states.pause) unpausedState = GAME.state;
 			GAME.state = GAME.states.pause;
 		}
-		GAME.state(GAME);
+		GAME.state(GAME, ctx);
 		GAME.keys.update();
 		setTimeout(loop, 1000/60);
 	}
