@@ -25,6 +25,9 @@ Promise.all([
 		"hit",
 		"kill",
 		"combo1",
+		"switch",
+		"no",
+		"buy",
 	),
 	loaders.loadSprites(
 		"player",
@@ -106,7 +109,7 @@ Promise.all([
 	}
 
 	GAME.states.setupNight = () => {
-		GAME.progress.night ++;
+		GAME.progress.night++;
 
 		GAME.world.clearAll();
 		
@@ -118,7 +121,7 @@ Promise.all([
 		//add player and sheep
 		GAME.world.add(player(vec(285, 120)), "player", 6, true);
 
-		for(let i = 0; i < 3; i++){
+		for(let i = 0; i < GAME.progress.sheep; i++){
 			GAME.world.add(sheep(vec(240 + i*40, 240)), "sheep", 3);
 		}
 
@@ -178,8 +181,8 @@ Promise.all([
 		handlePlayerKeys(GAME);
 
 		//check time
-		if(GAME.world.clock.count > 60){
-//			GAME.state = GAME.states.setupShop;
+		if(GAME.world.clock.count > 6 * 3600){
+			GAME.state = GAME.states.setupShop;
 		}
 
 		GAME.world.update(GAME);

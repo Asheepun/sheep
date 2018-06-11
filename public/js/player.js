@@ -5,6 +5,8 @@ import gun 						from "/js/gun.js";
 const player = (pos) => {
 	const that = traitHolder(); 
 
+	that.kills = 0;
+
 	traits.addEntityTrait({
 		pos,
 		size: vec(16, 20)

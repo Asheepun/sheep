@@ -73,6 +73,7 @@ const gameWorld = () => {
 	that.clearAll = () => {
 		for(let key in that){
 			if(that[key].constructor === Array)that[key].splice(0, that[key].length);
+			else if(that[key].type !== undefined) that[key] = {};
 		}
 	}
 
