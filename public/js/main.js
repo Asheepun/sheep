@@ -69,11 +69,7 @@ Promise.all([
 		states: {
 			setupShop,
 		},
-		progress: {
-			coins: 0,
-			night: 0,
-			sheep: 3,
-		}
+		progress: {},
 	};
 
 	GAME.keys = keys(
@@ -94,6 +90,11 @@ Promise.all([
 
 	GAME.states.start = () => {
 		if(GAME.keys[" "].downed){
+			GAME.progress = {
+				coins: 0,
+				night: 0,
+				sheep: 3,
+			}
 			GAME.state = GAME.states.setupNight;
 		}
 
@@ -185,6 +186,11 @@ Promise.all([
 			GAME.state = GAME.states.setupShop;
 		}
 
+		//check sheep
+		if(GAME.world.sheep.length === 0){
+			GAME.state = GAME.states.lost;
+		}
+
 		GAME.world.update(GAME);
 
 		ctx.save();
@@ -215,6 +221,23 @@ Promise.all([
 		ctx.scale(c.scale, c.scale);
 		text.white40("Paused", 217, 150, ctx)
 		text.white20("Press space to continue", 173, 200, ctx)
+		ctx.restore();
+	}
+
+	let wait = 180;
+
+	GAME.states.lost = (GAME, ctx) => {
+		wait--;
+		if(wait === 0){
+			wait = 180;
+			GAME.state = GAME.states.start;
+		}
+
+		ctx.save();
+		ctx.scale(GAME.c.scale, GAME.c.scale);
+		ctx.fillStyle = "black";
+		ctx.fillRect(0, 0, GAME.width, GAME.height)
+		text.white20("Where are all my sheep!!!", 170, 150, ctx);
 		ctx.restore();
 	}
 
