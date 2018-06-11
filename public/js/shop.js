@@ -10,7 +10,7 @@ const setupShop = (GAME) => {
 
 	GAME.world.clearAll();
 
-	GAME.world.add(hud.coinCounter(vec(100, 100)), "coinCounter", 5, true);
+	GAME.world.add(hud.coinCounter(vec(580, 17)), "coinCounter", 5, true);
 
 	GAME.world.add(clickableText("$2000", vec(325, 100), (GAME) => {
 		if(GAME.progress.coins >= 2000 && GAME.progress.sheep < 3){
@@ -65,6 +65,10 @@ const shop = (GAME, ctx) => {
 
 	text.white40("Shop", 250, 50, ctx);
 	text.white15("Sheep: " + GAME.progress.sheep + "/3", 210, 100, ctx);
+
+	text.grey15("Up: W", 17, 17, ctx);
+	text.grey15("Down: S", 17, 34, ctx);
+	text.grey15("Select: Space", 17, 51, ctx);
 
 	GAME.world.draw(ctx, GAME.sprites);
 
