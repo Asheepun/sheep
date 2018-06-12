@@ -1,5 +1,6 @@
-import traitHolder, * as traits from "/js/lib/traits.js";
-import vec, * as v 				from "/js/lib/vector.js";
+import traitHolder, * as traits 	  from "/js/lib/traits.js";
+import vec, * as v 					  from "/js/lib/vector.js";
+import particle, * as particleEffects from "/js/particles.js";
 
 const sheep = (pos) => {
 	const that = traitHolder(); 
@@ -45,9 +46,27 @@ const sheep = (pos) => {
 			that.hit = true;
 	}
 
-	that.handleHit = ({ world: { remove } }) => {
+	that.handleHit = ({ world: { remove, add }, world, audio: { play } }) => {
 		if(that.hit){
-			console.log("bäääh!");
+			for(let i = 0; i < 3; i++){
+				particleEffects.bloodEffect({
+					pos: that.center.copy(),
+					dir: vec(0, -1),
+					world,
+				});
+			}
+			add(particle({
+				pos: that.pos.copy(),
+				size: vec(20, 7),
+				velocity: vec(0, 0),
+				img: "sheep_corpse",
+				imgSize: vec(20, 7),
+				gravity: 0.04,
+			}), "particles", 4);
+
+			play("sheep");
+			play("kill");
+
 			remove(that);
 		}
 	}

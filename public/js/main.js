@@ -31,6 +31,7 @@ Promise.all([
 		"buy",
 		"reload",
 		"no_ammo",
+		"sheep",
 	),
 	loaders.loadSprites(
 		"player",
@@ -38,6 +39,7 @@ Promise.all([
 		"sheep",
 		"wolf",
 		"squirrel",
+		"sheep_corpse",
 		"wolf_corpse",
 		"squirrel_corpse",
 		"bullet",
