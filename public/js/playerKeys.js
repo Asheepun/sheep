@@ -32,7 +32,7 @@ const handlePlayerKeys = (GAME) => {
 	}
 	//reload
 	if(GAME.keys.P.downed || GAME.keys.p.downed){
-		GAME.world.player.gun.reload();
+		GAME.world.player.gun.reload(GAME);
 	}
 }
 

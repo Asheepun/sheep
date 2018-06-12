@@ -15,6 +15,7 @@ import shadow 					 from "/js/shadows.js";
 import bullet 					 from "/js/bullet.js";
 import * as text 				 from "/js/lib/text.js";
 import setupShop				 from "/js/shop.js";
+import moon						 from "/js/moon.js";
 
 Promise.all([
 	getCanvas(600, 300),
@@ -28,6 +29,8 @@ Promise.all([
 		"switch",
 		"no",
 		"buy",
+		"reload",
+		"no_ammo",
 	),
 	loaders.loadSprites(
 		"player",
@@ -48,12 +51,14 @@ Promise.all([
 		"blood_particle",
 		"ammobar",
 		"ammo",
+		"moon",
 	),
 ]).then(([ { c, ctx, pointer, width, height }, audio, sprites ]) => {
 
 	audio.setVolume();
 
 	audio.sounds.combo1.volume = 0.4;
+	audio.sounds.no_ammo.volume = 0.5;
 	
 	const GAME = {
 		c,
@@ -135,7 +140,7 @@ Promise.all([
 		
 		GAME.world.add(hud.combo(), "combo", 10, true);
 
-		//add shadows
+		//add shadows and moon
 		for(let i = 0; i < 10; i++){
 			for(let j = 0; j < 20; j++){
 				let pos = vec(j*30, i*30);
@@ -146,6 +151,8 @@ Promise.all([
 				}), "shadows", 9);
 			}
 		}
+
+		GAME.world.add(moon(), "moon", 1, true);
 
 		//add spawners
 		GAME.world.add({
