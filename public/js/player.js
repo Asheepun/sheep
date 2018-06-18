@@ -1,11 +1,10 @@
 import traitHolder, * as traits from "/js/lib/traits.js";
 import vec, * as v 				from "/js/lib/vector.js";
 import gun 						from "/js/gun.js";
+import particle, * as particles	from "/js/particles.js";
 
 const player = (pos) => {
 	const that = traitHolder(); 
-
-	that.kills = 0;
 
 	traits.addEntityTrait({
 		pos,
@@ -45,11 +44,14 @@ const player = (pos) => {
 				size: vec(11, 7),
 				spread: 0.7,
 				friendly: true,
+				damage: 1,
 			},
 			sound: "shoot",
 			screenshake: true,
 		})
 	})(that);
+
+	that.kills = 0;
 
 	that.downing = false;
 	that.dir = 0;
@@ -86,10 +88,27 @@ const player = (pos) => {
 	that.hit = false;
 	that.hitVelocity = vec(0, 0);
 
-	that.handleHit = () => {
+	that.handleHit = ({ world: { add }, world }) => {
 		if(that.hit){
 			that.deadCounter = 120;
 			that.hit = false;
+
+			add(particle({
+				pos: that.pos.copy(),
+				size: vec(20, 9),
+				velocity: vec(0, -2),
+				img: "player_corpse",
+				imgSize: vec(20, 9),
+				gravity: 0.05,
+			}), "particles", 4);
+
+			for(let i = 0; i < 3; i++){
+				particles.bloodEffect({
+					pos: that.center.copy(),
+					dir: vec(0, -1),
+					world: world,
+				});
+			}
 		}
 	}
 

@@ -1,10 +1,11 @@
 import traitHolder, * as traits from "/js/lib/traits.js";
 import vec, * as v 				from "/js/lib/vector.js";
 
-const bullet = ({ pos, velocity, size, friendly, img }) => {
+const bullet = ({ pos, velocity, size, friendly, img, damage = 1 }) => {
 	const that = traitHolder(); 
 
 	that.friendly = friendly;
+	that.damage = damage;
 
 	traits.addEntityTrait({
 		pos,
@@ -35,6 +36,7 @@ const bullet = ({ pos, velocity, size, friendly, img }) => {
 	that.enemiesCol = that.playerCol = that.sheepCol = (entity) => {
 		entity.hit = true;
 		entity.hitVelocity = that.velocity.copy();
+		entity.damage = that.damage;
 		that.hit = true;
 	}
 

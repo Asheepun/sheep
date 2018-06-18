@@ -21,12 +21,16 @@ export const loadAudio = (volume = 0.5, ...urls) => new Promise((resolve, reject
         }, {}),
         volume: 100,
     };
-	let a;
     audio.play = (url) => {
+		audio.sounds[url].load();
+		audio.sounds[url].play();
+    }
+	let a;
+	audio.playOffSync = (url) => {
 		a = audio.sounds[url].cloneNode();
 		a.volume = audio.sounds[url].volume;
 		a.play();
-    }
+	}
     audio.loop = (url) => {
         audio.sounds[url].loop = true;
         audio.play(url);

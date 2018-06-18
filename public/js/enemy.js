@@ -43,11 +43,12 @@ const enemy = ({ pos, size, health, color, img, imgSize, corpseSize }) => {
 
 	that.health = health;
 	that.hit = false;
+	that.damage = 0;
 
 	that.handleHit = (GAME) => {
 		if(that.hit){
 			that.hit = false;
-			that.health--;
+			that.health -= that.damage;
 			that.velocity.add(v.pipe(
 				that.hitVelocity,
 				v.normalize,
@@ -169,7 +170,7 @@ export const squirrel = (pos) => {
 			size: vec(20, 10),
 			shotDelay: 1,
 			reloadTime: 1,
-			ammoCapacity: 1,
+			ammoCapacity: 100,
 			sound: "enemy_shoot",
 			bulletSpec: {
 				speed: 6,
@@ -178,6 +179,10 @@ export const squirrel = (pos) => {
 				size: vec(20, 10),
 			}}), 
 	})(that);
+
+	//fix gun after death
+	that.removeMethods("handleHit", "handleGunPos");
+	that.addMethods("handleGunPos", "handleHit");
 
 	that.oubArea = [0, 0, 600, 300];
 
@@ -208,6 +213,48 @@ export const squirrel = (pos) => {
 	that.animate = () => {
 		if(that.dir > 0) that.facing.x = 1;
 		if(that.dir < 0) that.facing.x = -1;
+	}
+
+	that.addMethods("animate");
+
+	return that;
+}
+
+export const fox = (pos) => {
+	const that = enemy({
+		pos,
+		size: vec(20, 13),
+		img: "fox",
+		imgSize: vec(20, 13),
+		health: 1,
+		corpseSize: vec(20, 6),
+	});
+
+	traits.addCheckColTrait({
+		sets: ["sheep"],
+		singles: ["player"],
+	})(that);
+
+	that.speed = 0.3;
+
+	that.sheepCol = (sheep) => {
+		sheep.hit = true;
+	}
+
+	that.AI = ({ world: { bullets } }) => {
+		that.acceleration.x = that.dir*that.speed;
+
+		if(bullets) bullets.forEach(bullet => {
+			if(v.sub(that.center, bullet.center).mag < 100 && that.onGround){
+				that.velocity.y = -4.5;
+				that.acceleration.y = -1;
+			}
+		});
+	}
+
+	that.animate = () => {
+		if(that.dir > 0) that.facing.x = -1;
+		if(that.dir < 0) that.facing.x = 1;
 	}
 
 	that.addMethods("animate");

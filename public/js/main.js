@@ -1,6 +1,6 @@
 import getCanvas     			 from "/js/lib/canvas.js";
 import getWorld      			 from "/js/lib/gameWorld.js";
-import { wolf, squirrel } 		 from "/js/enemy.js";
+import { wolf, squirrel, fox } 	 from "/js/enemy.js";
 import vec, * as v   			 from "/js/lib/vector.js";
 import keys		     			 from "/js/lib/keys.js";
 import * as loaders  			 from "/js/lib/assets.js";
@@ -32,17 +32,24 @@ Promise.all([
 		"reload",
 		"no_ammo",
 		"sheep",
+		"first_music",
+		"set_trap",
 	),
 	loaders.loadSprites(
 		"player",
-		"gun",
 		"sheep",
+		"fox",
 		"wolf",
 		"squirrel",
+		"player_corpse",
 		"sheep_corpse",
 		"wolf_corpse",
 		"squirrel_corpse",
+		"fox_corpse",
+		"gun",
+		"big_gun",
 		"bullet",
+		"big_bullet",
 		"enemy_bullet",
 		"platform",
 		"top_platform",
@@ -53,6 +60,10 @@ Promise.all([
 		"blood_particle",
 		"ammobar",
 		"ammo",
+		"trapBar",
+		"trap_ammo",
+		"trap",
+		"used_trap",
 		"moon",
 	),
 ]).then(([ { c, ctx, pointer, width, height }, audio, sprites ]) => {
@@ -61,6 +72,7 @@ Promise.all([
 
 	audio.sounds.combo1.volume = 0.4;
 	audio.sounds.no_ammo.volume = 0.5;
+	audio.sounds.first_music.volume = 0.7;
 	
 	const GAME = {
 		c,
@@ -93,6 +105,10 @@ Promise.all([
 		"o",
 		"P",
 		"p",
+		"L",
+		"l",
+		"C",
+		"c",
 	);
 
 	GAME.states.start = () => {
@@ -101,8 +117,10 @@ Promise.all([
 				coins: 0,
 				night: 0,
 				sheep: 3,
+				traps: 1,
 			}
 			GAME.state = GAME.states.setupNight;
+			//GAME.audio.loop("first_music");
 		}
 
 		ctx.save();
@@ -136,6 +154,8 @@ Promise.all([
 		//add hud
 		GAME.world.add(hud.ammoBar(vec(5, 5)), "ammobar", 10, true);
 
+		GAME.world.add(hud.trapBar(vec(0, 20)), "trapBar", 10, true);
+
 		GAME.world.add(clock(vec(210, 17)), "clock", 10, true);
 
 		GAME.world.add(hud.coinCounter(vec(580, 17)), "coinCounter", 10, true);
@@ -159,13 +179,13 @@ Promise.all([
 		//add spawners
 		GAME.world.add({
 			pos: vec(-60, 210),
-			types: [wolf],
+			types: [wolf, fox],
 			dir: 1,
 		}, "bottomSpawners", 0);
 
 		GAME.world.add({
 			pos: vec(630, 210),
-			types: [wolf],
+			types: [wolf, fox],
 			dir: -1,
 		}, "bottomSpawners", 0);
 
@@ -173,13 +193,13 @@ Promise.all([
 			pos: vec(20, 0),	
 			types: [squirrel],
 			dir: 1,
-		}, "topSpawners", 0)
+		}, "topSpawners", 0);
 
 		GAME.world.add({
 			pos: vec(560, 0),	
 			types: [squirrel],
 			dir: -1,
-		}, "topSpawners", 0)
+		}, "topSpawners", 0);
 
 		GAME.world.add(spawnHandler(), "spawnHandler", 0, true);
 

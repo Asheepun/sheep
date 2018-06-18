@@ -2,7 +2,7 @@ import traitHolder, * as traits from "/js/lib/traits.js";
 import vec, * as v 				from "/js/lib/vector.js";
 import bullet					from "/js/bullet.js";
 
-const gun = ({ pos, size, shotDelay, reloadTime, ammoCapacity, bulletSpec, sound, knockback, screenshake = false }) => {
+const gun = ({ img = "gun", pos, size, shotDelay, reloadTime, ammoCapacity, bulletSpec, sound, knockback, screenshake = false }) => {
 	const that = traitHolder({
 		shotDelay,
 		reloadTime,
@@ -18,7 +18,7 @@ const gun = ({ pos, size, shotDelay, reloadTime, ammoCapacity, bulletSpec, sound
 	})(that);
 
 	traits.addSpriteTrait({
-		img: "gun",
+		img,
 		imgSize: that.size.copy(),
 	})(that);
 
@@ -34,7 +34,7 @@ const gun = ({ pos, size, shotDelay, reloadTime, ammoCapacity, bulletSpec, sound
 		if(that.reloading && !that.shooting && that.canShoot){
 			that.shooting = true;
 			that.shotDelayCounter = that.shotDelay;
-			audio.play("no_ammo");
+			audio.playOffSync("no_ammo");
 		}
 		if(!that.reloading && !that.shooting && that.canShoot){
 			that.shooting = true;
@@ -53,7 +53,7 @@ const gun = ({ pos, size, shotDelay, reloadTime, ammoCapacity, bulletSpec, sound
 				velocity: bulletVel,
 			})), "bullets", 3);
 
-			audio.play(that.sound);
+			audio.playOffSync(that.sound);
 
 			//kickback
 			that.pos.sub(v.mul(holder.aiming, 6));
@@ -69,8 +69,8 @@ const gun = ({ pos, size, shotDelay, reloadTime, ammoCapacity, bulletSpec, sound
 	}
 
 	that.reload = ({ audio: { play } }) => {
+		play("no_ammo");
 		if(!that.reloading && that.canShoot){
-			play("no_ammo");
 			that.reloading = true;
 			that.reloadCounter = that.reloadTime;
 			that.ammo = 0;
@@ -79,10 +79,13 @@ const gun = ({ pos, size, shotDelay, reloadTime, ammoCapacity, bulletSpec, sound
 
 	that.shotDelayCounter = 0;
 	that.reloadCounter = 0;
+	that.canReload = true;
 
-	that.handleDelays = ({ audio: { play } }) => {
+	that.handleDelays = ({ audio: { play, sounds } }) => {
+		if(that.canReload){
+			that.reloadCounter--;
+		}
 		that.shotDelayCounter--;
-		that.reloadCounter--;
 
 		if(that.shotDelayCounter === 0) that.shooting = false;
 

@@ -1,38 +1,48 @@
-const handlePlayerKeys = (GAME) => {
+import trap from "/js/trap.js";
+
+const handlePlayerKeys = ({ world: { player, add }, audio: { playOffSync }, progress, keys, audio }) => {
 	//jump
-	if(GAME.keys.W.downed || GAME.keys.w.downed || GAME.keys[" "].downed){
-		GAME.world.player.jump();
+	if(keys.W.downed || keys.w.downed || keys[" "].downed){
+		player.jump();
 	}
-	if(GAME.keys.W.upped || GAME.keys.w.upped || GAME.keys[" "].upped){
-		GAME.world.player.stopJump();
+	if(keys.W.upped || keys.w.upped || keys[" "].upped){
+		player.stopJump();
 	}
 	//move
-	if(GAME.keys.A.down || GAME.keys.a.down){
-		GAME.world.player.dir = -1;
+	if(keys.A.down || keys.a.down){
+		player.dir = -1;
 	}
-	if(GAME.keys.D.down || GAME.keys.d.down){
-		GAME.world.player.dir = 1;
+	if(keys.D.down || keys.d.down){
+		player.dir = 1;
 	}
-	if(GAME.keys.D.down && GAME.keys.d.down
-	&& GAME.keys.A.down && GAME.keys.a.down
-	|| !GAME.keys.D.down && !GAME.keys.d.down
-	&& !GAME.keys.A.down && !GAME.keys.a.down){
-		GAME.world.player.dir = 0;
+	if(keys.D.down && keys.d.down
+	&& keys.A.down && keys.a.down
+	|| !keys.D.down && !keys.d.down
+	&& !keys.A.down && !keys.a.down){
+		player.dir = 0;
 	}
-	if(GAME.keys.S.down || GAME.keys.s.down){
-		GAME.world.player.downing = true;
+	if(keys.S.down || keys.s.down){
+		player.downing = true;
 	}else{
-		GAME.world.player.downing = false;
+		player.downing = false;
 	}
 	//shoot
-	if(GAME.keys.O.down || GAME.keys.o.down){
-		GAME.world.player.shooting = true;
+	if(keys.O.down || keys.o.down){
+		player.shooting = true;
 	}else{
-		GAME.world.player.shooting = false;
+		player.shooting = false;
 	}
 	//reload
-	if(GAME.keys.P.downed || GAME.keys.p.downed){
-		GAME.world.player.gun.reload(GAME);
+	if(keys.P.downed || keys.p.downed){
+		player.gun.reload({audio});
+	}
+	//set trap
+	if(keys.L.downed || keys.l.downed){
+		if(progress.traps > 0){
+			add(trap(player.pos.copy()), "traps", 4);
+			playOffSync("set_trap");
+			progress.traps--;
+		}
 	}
 }
 

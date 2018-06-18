@@ -42,6 +42,32 @@ export const ammoBar = (pos) => {
 	return that;
 }
 
+export const trapBar = (pos) => {
+	const that = traitHolder();
+
+	traits.addEntityTrait({
+		pos,
+		size: vec(50, 20),
+	})(that);
+
+	that.traps = 0;
+
+	that.checkStatus = ({ progress }) => {
+		that.traps = progress.traps;
+	}
+
+	that.draw = (ctx, sprites) => {
+		ctx.drawImage(sprites.trapBar, that.pos.x, that.pos.y, that.size.x, that.size.y);
+		for(let i = 0; i < that.traps; i++){ 
+			ctx.drawImage(sprites.trap_ammo, that.pos.x + i*15 + 5, that.pos.y + 5, 10, 10);
+		}
+	}
+
+	that.addMethods("checkStatus");
+
+	return that;
+}
+
 export const coinCounter = (pos) => {
 	const that = traitHolder();
 	that.pos = pos;
@@ -75,7 +101,7 @@ export const combo = () => {
 	let countTimer = 0;
 	let lastCounter = 0;
 
-	that.count = ({ world: { player, add }, progress, audio: { play } }) => {
+	that.count = ({ world: { player, add }, progress, audio: { play, playOffSync } }) => {
 		countTimer--;
 		if(that.counter > lastCounter) countTimer = 70;
 
@@ -83,7 +109,7 @@ export const combo = () => {
 			progress.coins += 10 * Math.pow(2, that.counter);
 
 			for(let i = 0; i < that.counter; i++){
-				setTimeout(() => play("combo1"), 70*i);
+				setTimeout(() => playOffSync("combo1"), 70*i);
 			}
 			add(coinText(10 * Math.pow(2, that.counter), vec(player.pos.x, player.pos.y)), "text", 10);
 			that.counter = 0;

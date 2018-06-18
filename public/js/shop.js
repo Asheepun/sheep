@@ -13,11 +13,23 @@ const setupShop = (GAME) => {
 	GAME.world.add(hud.coinCounter(vec(580, 17)), "coinCounter", 5, true);
 
 	GAME.world.add(clickableText("$2000", vec(325, 100), (GAME) => {
-		if(GAME.progress.coins >= 2000 && GAME.progress.sheep < 3){
-			GAME.progress.sheep++;
-			GAME.progress.coins -= 2000;
-			GAME.audio.play("buy");
-		}else GAME.audio.play("no");
+		if(GAME.progress.coins < 2000 || GAME.progress.sheep >= 3){
+			GAME.audio.play("no");
+			return;
+		}
+		GAME.progress.sheep++;
+		GAME.progress.coins -= 2000;
+		GAME.audio.play("buy");
+	}), "shopButtons", 5);
+
+	GAME.world.add(clickableText("$1000", vec(325, 130), (GAME) => {
+		if(GAME.progress.coins < 1000 || GAME.progress.traps >= 3){
+			GAME.audio.play("no");
+			return;
+		}
+		GAME.progress.traps++;
+		GAME.progress.coins -= 1000;
+		GAME.audio.play("buy");
 	}), "shopButtons", 5);
 
 	GAME.world.add(clickableText("Continue", vec(255, 200), (GAME) => {
@@ -37,12 +49,14 @@ const shop = (GAME, ctx) => {
 	if(GAME.keys.w.downed || GAME.keys.W.downed){
 		GAME.audio.play("switch");
 		currentShopButton--;
-		if(currentShopButton < 0) currentShopButton = GAME.world.shopButtons.length-1;
+		if(currentShopButton < 0) 
+			currentShopButton = GAME.world.shopButtons.length-1;
 	}
 	if(GAME.keys.s.downed || GAME.keys.S.downed){
 		GAME.audio.play("switch");
 		currentShopButton++;
-		if(currentShopButton >= GAME.world.shopButtons.length) currentShopButton = 0;
+		if(currentShopButton >= GAME.world.shopButtons.length) 
+			currentShopButton = 0;
 	}
 	if(GAME.keys[" "].downed){
 		GAME.world.shopButtons[currentShopButton].action(GAME);
@@ -65,6 +79,7 @@ const shop = (GAME, ctx) => {
 
 	text.white40("Shop", 250, 50, ctx);
 	text.white15("Sheep: " + GAME.progress.sheep + "/3", 210, 100, ctx);
+	text.white15("Traps: " + GAME.progress.sheep + "/3", 210, 130, ctx);
 
 	text.grey15("Up: W", 17, 17, ctx);
 	text.grey15("Down: S", 17, 34, ctx);

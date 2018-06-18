@@ -269,8 +269,7 @@ export const addGunTrait = ({ gun, aiming = vec(1, 0) }) => (that) => {
 	//add the gun to the world so that it can be drawn
 	let added = false;
 	that.addGunToWorld = ({ world: { guns, add } }) => {
-		if(!added){
-			added = true;
+		if(!guns || guns.indexOf(that.gun) === -1){
 			add(that.gun, "guns", 6);
 		}
 	}
