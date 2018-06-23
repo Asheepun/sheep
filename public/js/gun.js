@@ -46,7 +46,7 @@ const gun = ({ img = "gun", pos, size, shotDelay, reloadTime, ammoCapacity, bull
 			//make bullet
 			bulletPos = v.add(that.pos, v.mul(holder.aiming, that.size.x / 2));
 			bulletVel = v.mul(holder.aiming, bulletSpec.speed)
-			.add(v.rVec(-bulletSpec.spread/2, bulletSpec.spread));
+			.add(v.rVec(-bulletSpec.spread/1.5, bulletSpec.spread));
 
 			add(bullet(Object.assign(bulletSpec, {
 				pos: bulletPos,

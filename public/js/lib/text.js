@@ -24,6 +24,8 @@ export const grey = (text, x, y, fontSize, ctx) => defaultText({
 	font: "game",
 });
 
+export const white5 = (text, x, y, ctx) => white(text, x, y, 5, ctx);
+
 export const white15 = (text, x, y, ctx) => white(text, x, y, 15, ctx);
 
 export const white20 = (text, x, y, ctx) => white(text, x, y, 20, ctx);

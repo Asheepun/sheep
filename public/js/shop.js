@@ -3,7 +3,7 @@ import traitHolder, * as traits from "/js/lib/traits.js";
 import vec, * as v 				from "/js/lib/vector.js";
 import * as hud 				from "/js/hud.js";
 
-let currentShopButton;;
+let currentShopButton;
 
 const setupShop = (GAME) => {
 	GAME.progress.sheep = GAME.world.sheep.length;
@@ -32,9 +32,18 @@ const setupShop = (GAME) => {
 		GAME.audio.play("buy");
 	}), "shopButtons", 5);
 
+	GAME.world.add(clickableText("$1500", vec(325, 160), (GAME) => {
+		if(GAME.progress.coins < 1500){
+			GAME.audio.play("no");
+			return;
+		}
+		GAME.progress.coins -= 1500;
+		localStorage.progress = JSON.stringify(GAME.progress);
+		GAME.audio.play("save");
+	}), "shopButtons", 5);
+
 	GAME.world.add(clickableText("Continue", vec(255, 200), (GAME) => {
 		GAME.state = GAME.states.setupNight;
-
 	}), "shopButtons", 5);
 
 	currentShopButton = 0;
@@ -80,6 +89,9 @@ const shop = (GAME, ctx) => {
 	text.white40("Shop", 250, 50, ctx);
 	text.white15("Sheep: " + GAME.progress.sheep + "/3", 210, 100, ctx);
 	text.white15("Traps: " + GAME.progress.traps + "/3", 210, 130, ctx);
+	text.white15("Save:", 210, 160, ctx);
+	text.white5("Last save", 270, 155, ctx);
+	text.white5("Night " + (JSON.parse(localStorage.progress).night + 1), 270, 160, ctx);
 
 	text.grey15("Up: W", 17, 17, ctx);
 	text.grey15("Down: S", 17, 34, ctx);

@@ -16,6 +16,7 @@ import shadow 					 		 from "/js/shadows.js";
 import bullet 					 		 from "/js/bullet.js";
 import * as text 				 		 from "/js/lib/text.js";
 import setupShop				 		 from "/js/shop.js";
+import setupStart						 from "/js/start.js";
 import moon						 		 from "/js/moon.js";
 
 Promise.all([
@@ -27,6 +28,7 @@ Promise.all([
 		"hit",
 		"kill",
 		"combo1",
+		"save",
 		"switch",
 		"no",
 		"buy",
@@ -90,6 +92,7 @@ Promise.all([
 		offset: vec(0, 0),
 		states: {
 			setupShop,
+			setupStart,
 		},
 		progress: {},
 	};
@@ -114,31 +117,7 @@ Promise.all([
 		"c",
 	);
 
-GAME.states.start = () => {
-		if(GAME.keys[" "].downed){
-			GAME.progress = {
-				coins: 0,
-				night: 1,
-				sheep: 3,
-				traps: 1,
-			}
-			GAME.state = GAME.states.setupNight;
-			//GAME.audio.loop("first_music");
-		}
-
-		ctx.save();
-		ctx.scale(c.scale, c.scale)
-		ctx.fillStyle = "black";
-		ctx.fillRect(0, 0, GAME.width, GAME.height)
-		text.white15("Move with WASD", 215, 100, ctx);
-		text.white15("Shoot with O reload with P", 182, 130, ctx);
-		text.white20("Press space to begin", 180, 200, ctx);
-		ctx.restore();
-
-	}
-
 	GAME.states.setupNight = () => {
-		GAME.progress.night++;
 
 		GAME.world.clearAll();
 		
@@ -197,6 +176,7 @@ GAME.states.start = () => {
 		//check time
 		if(GAME.world.clock.count > 6 * 3600){
 			GAME.state = GAME.states.setupShop;
+			GAME.progress.night++;
 		}
 
 		//check sheep
@@ -243,7 +223,7 @@ GAME.states.start = () => {
 		wait--;
 		if(wait === 0){
 			wait = 180;
-			GAME.state = GAME.states.start;
+			GAME.state = GAME.states.setupStart;
 		}
 
 		ctx.save();
@@ -254,7 +234,7 @@ GAME.states.start = () => {
 		ctx.restore();
 	}
 
-	GAME.state = GAME.states.start;
+	GAME.state = GAME.states.setupStart;
 
 	let unpausedState;
 	
