@@ -10,7 +10,7 @@ const clock = (pos) => {
 	that.count = 0;
 
 	that.tick = () => {
-		that.count += 2;
+		that.count += 3;
 	}
 
 	that.draw = (ctx) => {

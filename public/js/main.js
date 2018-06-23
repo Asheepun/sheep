@@ -1,21 +1,22 @@
-import getCanvas     			 from "/js/lib/canvas.js";
-import getWorld      			 from "/js/lib/gameWorld.js";
-import { wolf, squirrel, fox } 	 from "/js/enemy.js";
-import vec, * as v   			 from "/js/lib/vector.js";
-import keys		     			 from "/js/lib/keys.js";
-import * as loaders  			 from "/js/lib/assets.js";
-import spawnHandler 			 from "/js/spawnHandler.js";
-import handlePlayerKeys 		 from "/js/playerKeys.js";
-import clock					 from "/js/clock.js";
-import * as hud 				 from "/js/hud.js";
-import player 					 from "/js/player.js";
-import sheep 					 from "/js/sheep.js";
-import * as obstacles 			 from "/js/obstacles.js";
-import shadow 					 from "/js/shadows.js";
-import bullet 					 from "/js/bullet.js";
-import * as text 				 from "/js/lib/text.js";
-import setupShop				 from "/js/shop.js";
-import moon						 from "/js/moon.js";
+import getCanvas     			 		 from "/js/lib/canvas.js";
+import getWorld      			 		 from "/js/lib/gameWorld.js";
+import { wolf, squirrel, fox, eagle } 	 from "/js/enemy.js";
+import vec, * as v   			 		 from "/js/lib/vector.js";
+import keys		     			 		 from "/js/lib/keys.js";
+import * as loaders  			 		 from "/js/lib/assets.js";
+import spawnHandler 			 		 from "/js/spawnHandler.js";
+import nights 							 from "/js/spawners.js";
+import handlePlayerKeys 		 		 from "/js/playerKeys.js";
+import clock					 		 from "/js/clock.js";
+import * as hud 				 		 from "/js/hud.js";
+import player, { playerArm } 			 from "/js/player.js";
+import sheep 					 		 from "/js/sheep.js";
+import * as obstacles 			 		 from "/js/obstacles.js";
+import shadow 					 		 from "/js/shadows.js";
+import bullet 					 		 from "/js/bullet.js";
+import * as text 				 		 from "/js/lib/text.js";
+import setupShop				 		 from "/js/shop.js";
+import moon						 		 from "/js/moon.js";
 
 Promise.all([
 	getCanvas(600, 300),
@@ -34,6 +35,7 @@ Promise.all([
 		"sheep",
 		"first_music",
 		"set_trap",
+		"eagle",
 	),
 	loaders.loadSprites(
 		"player",
@@ -46,6 +48,7 @@ Promise.all([
 		"wolf_corpse",
 		"squirrel_corpse",
 		"fox_corpse",
+		"player_arm",
 		"gun",
 		"big_gun",
 		"bullet",
@@ -111,11 +114,11 @@ Promise.all([
 		"c",
 	);
 
-	GAME.states.start = () => {
+GAME.states.start = () => {
 		if(GAME.keys[" "].downed){
 			GAME.progress = {
 				coins: 0,
-				night: 0,
+				night: 1,
 				sheep: 3,
 				traps: 1,
 			}
@@ -146,6 +149,7 @@ Promise.all([
 		
 		//add player and sheep
 		GAME.world.add(player(vec(285, 120)), "player", 6, true);
+		GAME.world.add(playerArm(), "playerArm", 8, true);
 
 		for(let i = 0; i < GAME.progress.sheep; i++){
 			GAME.world.add(sheep(vec(240 + i*40, 240)), "sheep", 3);
@@ -177,29 +181,9 @@ Promise.all([
 		GAME.world.add(moon(), "moon", 1, true);
 
 		//add spawners
-		GAME.world.add({
-			pos: vec(-60, 210),
-			types: [wolf, fox],
-			dir: 1,
-		}, "bottomSpawners", 0);
-
-		GAME.world.add({
-			pos: vec(630, 210),
-			types: [wolf, fox],
-			dir: -1,
-		}, "bottomSpawners", 0);
-
-		GAME.world.add({
-			pos: vec(20, 0),	
-			types: [squirrel],
-			dir: 1,
-		}, "topSpawners", 0);
-
-		GAME.world.add({
-			pos: vec(560, 0),	
-			types: [squirrel],
-			dir: -1,
-		}, "topSpawners", 0);
+		nights[GAME.progress.night].forEach(spawner => {
+			GAME.world.add(spawner, spawner.place, 0);
+		});
 
 		GAME.world.add(spawnHandler(), "spawnHandler", 0, true);
 

@@ -8,27 +8,12 @@ const player = (pos) => {
 
 	traits.addEntityTrait({
 		pos,
-		size: vec(16, 20)
+		size: vec(12, 20)
 	})(that);
 
 	traits.addSpriteTrait({
 		img: "player",
 		imgSize: that.size.copy(),
-	})(that);
-
-	traits.addMoveTrait({})(that);
-
-	traits.addPhysicsTrait({
-		gravity: 0.08,
-		resistance: 0.80,
-	})(that);
-
-	traits.addColTrait({})(that);
-
-	traits.addPlatformColTrait({})(that);
-
-	traits.addOubTrait({
-		oubArea: [0, 0, 600, 300]	
 	})(that);
 
 	traits.addGunTrait({
@@ -49,6 +34,21 @@ const player = (pos) => {
 			sound: "shoot",
 			screenshake: true,
 		})
+	})(that);
+
+	traits.addMoveTrait({})(that);
+
+	traits.addPhysicsTrait({
+		gravity: 0.08,
+		resistance: 0.80,
+	})(that);
+
+	traits.addColTrait({})(that);
+
+	traits.addPlatformColTrait({})(that);
+
+	traits.addOubTrait({
+		oubArea: [0, 0, 600, 300]	
 	})(that);
 
 	that.kills = 0;
@@ -136,7 +136,51 @@ const player = (pos) => {
 		if(that.dir < 0) that.facing.x = -1;
 	}
 
-	that.addMethods("handleControls", "handleShooting", "handleHit", "handleDead", "animate");
+	let frameCounter = 0;
+	that.handleFrames = () => {
+		frameCounter += 1;
+
+		if(frameCounter % 4 === 0){
+			that.imgPos.x += 13;
+			if(that.imgPos.x >= 4*12+3) that.imgPos.x = 0;
+		}
+
+		if(that.dir === 0) that.imgPos.x = 0;
+	}
+
+	that.findArm = ({ world: { playerArm } }) => that.arm = playerArm;
+
+	that.addMethods("handleControls", "handleShooting", "handleHit", "handleDead", "animate", "handleFrames", "findArm");
+
+	return that;
+}
+
+export const playerArm = () => {
+	const that = traitHolder();
+
+	traits.addEntityTrait({
+		pos: vec(100, 100),
+		size: vec(6, 4),
+	})(that);
+
+	traits.addSpriteTrait({
+		img: "player_arm",
+		imgSize: that.size.copy(),
+	})(that);
+
+	that.knockback = 0;
+
+	that.followPlayer = ({ world: { player } }) => {
+		that.pos = player.pos.copy();
+		that.pos.y += 10;
+		that.pos.x += 2;
+		if(player.facing.x === -1) that.pos.x += 2
+		that.facing = player.facing;
+		that.pos.x += that.knockback;
+		that.knockback = 0;
+	}
+
+	that.addMethods("followPlayer");
 
 	return that;
 }

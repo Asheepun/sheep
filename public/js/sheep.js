@@ -18,7 +18,7 @@ const sheep = (pos) => {
 	traits.addMoveTrait({})(that);
 
 	traits.addPhysicsTrait({
-		gravity: 0.003,
+		gravity: 0.1,
 		resistance: 0.80,
 	})(that);
 
@@ -42,7 +42,7 @@ const sheep = (pos) => {
 	}
 
 	that.checkOub = () => {
-		if(that.pos.x > 600 || that.pos.x < -20)
+		if(that.pos.y < -20 || that.pos.y > 300 ||that.pos.x > 600 || that.pos.x < -20)
 			that.hit = true;
 	}
 

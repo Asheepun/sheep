@@ -10,8 +10,15 @@ const spawnHandler = () => {
 	let type;
 	let enemy;
 
-	that.spawn = ({ world: { topSpawners, bottomSpawners, add, player } }) => {
+	that.spawn = ({ world: { topSpawners, bottomSpawners, add, player, clock } }) => {
 		that.spawnCounter--;
+
+		if(clock.count > 300*60) that.spawnDelay = 60;
+		else if(clock.count > 240*60) that.spawnDelay = 60;
+		else if(clock.count > 180*60) that.spawnDelay = 80;
+		else if(clock.count > 120*60) that.spawnDelay = 80;
+		else if(clock.count > 60*60) that.spawnDelay = 100;
+		else that.spawnDelay = 120;
 
 		if(that.spawnCounter === 0){
 			that.spawnCounter = that.spawnDelay;
@@ -26,9 +33,6 @@ const spawnHandler = () => {
 			enemy.dir = spawner.dir;
 
 			add(enemy, "enemies", 4);
-
-			if(player.kills % 10 === 0)
-				that.spawnDelay -= 5;
 		}
 	}
 

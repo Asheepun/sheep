@@ -79,7 +79,7 @@ const shop = (GAME, ctx) => {
 
 	text.white40("Shop", 250, 50, ctx);
 	text.white15("Sheep: " + GAME.progress.sheep + "/3", 210, 100, ctx);
-	text.white15("Traps: " + GAME.progress.sheep + "/3", 210, 130, ctx);
+	text.white15("Traps: " + GAME.progress.traps + "/3", 210, 130, ctx);
 
 	text.grey15("Up: W", 17, 17, ctx);
 	text.grey15("Down: S", 17, 34, ctx);

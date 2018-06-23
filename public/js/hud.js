@@ -103,7 +103,7 @@ export const combo = () => {
 
 	that.count = ({ world: { player, add }, progress, audio: { play, playOffSync } }) => {
 		countTimer--;
-		if(that.counter > lastCounter) countTimer = 70;
+		if(that.counter > lastCounter) countTimer = 60;
 
 		if(countTimer === 0){
 			progress.coins += 10 * Math.pow(2, that.counter);

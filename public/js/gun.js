@@ -58,6 +58,8 @@ const gun = ({ img = "gun", pos, size, shotDelay, reloadTime, ammoCapacity, bull
 			//kickback
 			that.pos.sub(v.mul(holder.aiming, 6));
 
+			if(holder.arm) holder.arm.knockback = -holder.aiming.x*2;
+			
 			//knockback
 			holder.pos.sub(v.mul(holder.aiming, 3));
 
@@ -100,5 +102,6 @@ const gun = ({ img = "gun", pos, size, shotDelay, reloadTime, ammoCapacity, bull
 
 	return that;
 }
+
 
 export default gun;

@@ -269,8 +269,9 @@ export const addGunTrait = ({ gun, aiming = vec(1, 0) }) => (that) => {
 	//add the gun to the world so that it can be drawn
 	let added = false;
 	that.addGunToWorld = ({ world: { guns, add } }) => {
-		if(!guns || guns.indexOf(that.gun) === -1){
+		if(!added){
 			add(that.gun, "guns", 6);
+			added = true;
 		}
 	}
 
@@ -278,7 +279,7 @@ export const addGunTrait = ({ gun, aiming = vec(1, 0) }) => (that) => {
 		that.gun.pos = v.pipe(
 			that.center,
 			x => v.add(x, vec(-that.gun.size.x/2, -that.size.x/2 + 4)),
-			x => v.add(x, v.mul(that.aiming, that.size.x/2))
+			x => v.add(x, v.mul(that.aiming, that.size.x/1.5))
 		);
 		that.gun.rotation = v.angle(vec(0, 0), that.aiming) - 4.7;
 
@@ -290,3 +291,6 @@ export const addGunTrait = ({ gun, aiming = vec(1, 0) }) => (that) => {
 	that.addMethods("addGunToWorld", "handleGunPos");
 }
 
+export const frameTrait = () => {
+	
+}

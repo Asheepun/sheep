@@ -68,7 +68,7 @@ const enemy = ({ pos, size, health, color, img, imgSize, corpseSize }) => {
 			that.die(GAME);
 			GAME.audio.play("kill");
 
-			GAME.world.add(particle({
+			if(that.corpseSize) GAME.world.add(particle({
 				pos: that.pos.copy(),
 				size: that.corpseSize,
 				velocity: vec(v.normalize(that.hitVelocity).x * 2, -0.5),
@@ -246,10 +246,14 @@ export const fox = (pos) => {
 
 		if(bullets) bullets.forEach(bullet => {
 			if(v.sub(that.center, bullet.center).mag < 100 && that.onGround){
-				that.velocity.y = -4.5;
-				that.acceleration.y = -1;
+				that.jump();
 			}
 		});
+	}
+
+	that.jump = () => {
+		that.velocity.y = -4.5;
+		that.acceleration.y = -1;
 	}
 
 	that.animate = () => {
@@ -258,6 +262,64 @@ export const fox = (pos) => {
 	}
 
 	that.addMethods("animate");
+
+	return that;
+}
+
+export const eagle = (pos) => {
+	const that = enemy({
+		pos,
+		size: vec(20, 20),
+		health: 1,
+		color: "white",
+
+	});
+
+	that.oubArea = [-100, -100, 1000, 1000];
+
+	let targetSheep;
+	that.AI = ({ world: { sheep } }) => {
+		targetSheep = sheep[0];
+
+		if(!that.grabbing && targetSheep && !targetSheep.grabbed) that.velocity = v.pipe(
+			v.sub(that.center, targetSheep.center),
+			v.normalize,
+			v.reverse,
+			x => v.mul(x, 5),
+		);
+		else that.velocity = vec(0, -2);
+	}
+
+	that.handleOubX = that.handleOubY = ({ world: { remove } }) => {
+		remove(that);
+	}
+
+	let sheepCol = false;
+	that.grabbing;
+	that.grabSheep = ({ world: { sheep } }) => {
+		sheepCol = checkSetCol(that, sheep);
+
+		if(sheepCol && !sheepCol.grabbed && !that.grabbing){
+			that.grabbing = sheepCol;
+		}
+
+		if(that.grabbing){
+			that.grabbing.grabbed = true;
+			that.grabbing.grabbedPos.x = that.pos.x;
+			that.grabbing.grabbedPos.y = that.pos.y + that.size.y-5;
+		}
+	
+	}
+
+	let screamed = false;
+	that.scream = ({ audio: { play } }) => {
+		if(!screamed){
+			play("eagle");
+			screamed = true;
+		}
+	}
+
+	that.addMethods("grabSheep", "scream");
 
 	return that;
 }
