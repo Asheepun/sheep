@@ -12,6 +12,10 @@ const setupStart = (GAME) => {
 		GAME.progress = JSON.parse(localStorage.progress);
 		GAME.state = GAME.states.setupNight;
 	}
+	const loadSave = (GAME) => {
+		startNight(GAME);
+		GAME.state = GAME.states.setupShop;
+	}
 
 	GAME.world.add(clickableText("New Game", vec(260, 130), (GAME) => {
 		localStorage.progress = JSON.stringify({
@@ -26,7 +30,7 @@ const setupStart = (GAME) => {
 	currentButton = 0;
 
 	if(localStorage.progress && JSON.parse(localStorage.progress).night > 0){
-		GAME.world.add(clickableText("Load Save", vec(260, 150), startNight), "startButtons", 2);
+		GAME.world.add(clickableText("Load Save", vec(260, 150), loadSave), "startButtons", 2);
 		currentButton = 1;
 	}
 

@@ -6,8 +6,6 @@ import * as hud 				from "/js/hud.js";
 let currentShopButton;
 
 const setupShop = (GAME) => {
-	GAME.progress.sheep = GAME.world.sheep.length;
-
 	GAME.world.clearAll();
 
 	GAME.world.add(hud.coinCounter(vec(580, 17)), "coinCounter", 5, true);

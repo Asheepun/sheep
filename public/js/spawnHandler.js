@@ -14,9 +14,9 @@ const spawnHandler = () => {
 		that.spawnCounter--;
 
 		if(clock.count > 300*60) that.spawnDelay = 60;
-		else if(clock.count > 240*60) that.spawnDelay = 60;
+		else if(clock.count > 240*60) that.spawnDelay = 70;
 		else if(clock.count > 180*60) that.spawnDelay = 80;
-		else if(clock.count > 120*60) that.spawnDelay = 80;
+		else if(clock.count > 120*60) that.spawnDelay = 100;
 		else if(clock.count > 60*60) that.spawnDelay = 100;
 		else that.spawnDelay = 120;
 

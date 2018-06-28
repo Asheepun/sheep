@@ -51,6 +51,11 @@ const player = (pos) => {
 		oubArea: [0, 0, 600, 300]	
 	})(that);
 
+	traits.addFrameTrait({
+		delay: 4,
+		frames: "playerFrames",
+	})(that);
+
 	that.kills = 0;
 
 	that.downing = false;
@@ -128,29 +133,22 @@ const player = (pos) => {
 			that.pos.x = 293;
 			that.canMove = true;
 			that.gun.canShoot = true;
+			that.gun.reloadCounter = 1;
 		}
 	}
 
 	that.animate = () => {
 		if(that.dir > 0) that.facing.x = 1;
 		if(that.dir < 0) that.facing.x = -1;
+
+		if(that.dir === 0) that.frameState = "still";
+		else that.frameState = "moving";
 	}
 
-	let frameCounter = 0;
-	that.handleFrames = () => {
-		frameCounter += 1;
-
-		if(frameCounter % 4 === 0){
-			that.imgPos.x += 13;
-			if(that.imgPos.x >= 4*12+3) that.imgPos.x = 0;
-		}
-
-		if(that.dir === 0) that.imgPos.x = 0;
-	}
 
 	that.findArm = ({ world: { playerArm } }) => that.arm = playerArm;
 
-	that.addMethods("handleControls", "handleShooting", "handleHit", "handleDead", "animate", "handleFrames", "findArm");
+	that.addMethods("handleControls", "handleShooting", "handleHit", "handleDead", "animate", "findArm");
 
 	return that;
 }

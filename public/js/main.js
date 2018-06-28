@@ -21,6 +21,10 @@ import moon						 		 from "/js/moon.js";
 
 Promise.all([
 	getCanvas(600, 300),
+	loaders.loadJSON(
+		"playerFrames",
+		"wolfFrames",
+	),
 	loaders.loadAudio(
 		0.3,
 		"shoot",
@@ -71,7 +75,7 @@ Promise.all([
 		"used_trap",
 		"moon",
 	),
-]).then(([ { c, ctx, pointer, width, height }, audio, sprites ]) => {
+]).then(([ { c, ctx, pointer, width, height }, JSON, audio, sprites ]) => {
 
 	audio.setVolume();
 
@@ -85,6 +89,7 @@ Promise.all([
 		pointer,
 		width,
 		height,
+		JSON,
 		audio,
 		sprites,
 		world: getWorld(),
@@ -175,8 +180,9 @@ Promise.all([
 
 		//check time
 		if(GAME.world.clock.count > 6 * 3600){
-			GAME.state = GAME.states.setupShop;
 			GAME.progress.night++;
+			GAME.progress.sheep = GAME.world.sheep.length;
+			GAME.state = GAME.states.setupShop;
 		}
 
 		//check sheep

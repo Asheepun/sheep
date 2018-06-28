@@ -99,15 +99,21 @@ const enemy = ({ pos, size, health, color, img, imgSize, corpseSize }) => {
 export const wolf = (pos) => {
 	const that = enemy({
 		pos,
-		size: vec(18, 20),
+		size: vec(16, 20),
 		health: 2,
 		img: "wolf",
-		imgSize: vec(18, 20),
+		imgSize: vec(16, 20),
 		corpseSize: vec(20, 11),
 	});
 
 	traits.addCheckColTrait({
 		singles: ["player"],
+	})(that);
+
+	traits.addFrameTrait({
+		delay: 6,
+		frames: "wolfFrames",
+		initState: "moving",
 	})(that);
 
 	that.playerCol = (player) => {
@@ -121,7 +127,10 @@ export const wolf = (pos) => {
 	that.AI = () => {
 		that.acceleration.x = that.dir*that.speed;
 
-		if(that.hit) that.speed += 0.3;
+		if(that.hit){
+			that.speed += 0.3;
+			that.frameDelay = 2;
+		}
 	}
 
 	let sheepCol = false;
@@ -238,7 +247,7 @@ export const fox = (pos) => {
 	that.speed = 0.3;
 
 	that.sheepCol = (sheep) => {
-		sheep.hit = true;
+		if(!sheep.grabbed) sheep.hit = true;
 	}
 
 	that.AI = ({ world: { bullets } }) => {

@@ -291,6 +291,19 @@ export const addGunTrait = ({ gun, aiming = vec(1, 0) }) => (that) => {
 	that.addMethods("addGunToWorld", "handleGunPos");
 }
 
-export const frameTrait = () => {
-	
+export const addFrameTrait = ({ delay, frames, initState = "still" }) => (that) => {
+	that.frameState = initState;
+	that.frames = frames;
+	that.frameDelay = delay;
+
+	let frameCounter = 0;
+	that.handleFrames = ({ JSON }) => {
+		frameCounter += 1;
+
+		if(Math.floor(frameCounter/that.frameDelay) >= JSON[that.frames][that.frameState].length) frameCounter = 0;
+
+		that.imgPos = JSON[that.frames][that.frameState][Math.floor(frameCounter/that.frameDelay)];
+	}
+
+	that.addMethods("handleFrames");
 }

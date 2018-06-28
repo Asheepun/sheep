@@ -81,12 +81,9 @@ const gun = ({ img = "gun", pos, size, shotDelay, reloadTime, ammoCapacity, bull
 
 	that.shotDelayCounter = 0;
 	that.reloadCounter = 0;
-	that.canReload = true;
 
 	that.handleDelays = ({ audio: { play, sounds } }) => {
-		if(that.canReload){
-			that.reloadCounter--;
-		}
+		that.reloadCounter--;
 		that.shotDelayCounter--;
 
 		if(that.shotDelayCounter === 0) that.shooting = false;
