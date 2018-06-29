@@ -24,6 +24,7 @@ Promise.all([
 	loaders.loadJSON(
 		"playerFrames",
 		"wolfFrames",
+		"squirrelFrames",
 	),
 	loaders.loadAudio(
 		0.3,

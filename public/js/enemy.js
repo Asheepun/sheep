@@ -164,7 +164,7 @@ export const wolf = (pos) => {
 export const squirrel = (pos) => {
 	const that = enemy({
 		pos,
-		size: vec(15, 20),
+		size: vec(17, 20),
 		health: 2,
 		img: "squirrel",
 		imgSize: vec(17, 20),
@@ -172,6 +172,11 @@ export const squirrel = (pos) => {
 	});
 
 	traits.addPlatformColTrait({})(that);
+
+	traits.addFrameTrait({
+		delay: 4,
+		frames: "squirrelFrames",
+	})(that);
 
 	traits.addGunTrait({
 		gun: gun({
@@ -222,6 +227,11 @@ export const squirrel = (pos) => {
 	that.animate = () => {
 		if(that.dir > 0) that.facing.x = 1;
 		if(that.dir < 0) that.facing.x = -1;
+
+		if(walkCounter > 0) that.frameState = "moving";
+		else that.frameState = "still";
+		console.log(that.frameState)
+		console.log(that.imgPos)
 	}
 
 	that.addMethods("animate");
