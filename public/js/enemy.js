@@ -346,7 +346,6 @@ export const eagle = (pos) => {
 		if(that.velocity.x > 0) that.facing.x = 1;
 		if(that.velocity.x < 0) that.facing.x = -1;
 		if(that.grabbing !== undefined) that.frameState = "grabbing";
-		console.log(that.frameState)
 	}
 
 	that.addMethods("grabSheep", "scream", "animate");

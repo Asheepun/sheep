@@ -75,6 +75,9 @@ const start = (GAME, ctx) => {
 	text.grey15("Down: S", 17, 34, ctx);
 	text.grey15("Select: Space", 17, 51, ctx);
 
+	if(localStorage.house === undefined) text.white20("No House", 250, 70, ctx);
+	else text.white20(localStorage.house, 250, 70, ctx);
+
 	GAME.world.draw(ctx, GAME.sprites);
 
 	ctx.restore();

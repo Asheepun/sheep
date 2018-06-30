@@ -46,6 +46,49 @@ const setupShop = (GAME) => {
 
 	currentShopButton = 0;
 
+	if(GAME.progress.night >= 3){
+		GAME.world.clearTypes("shopButtons");
+
+		GAME.world.add(clickableText("$2000", vec(325, 100), (GAME) => {
+			if(GAME.progress.coins < 2000){
+				GAME.audio.play("no");
+				return;
+			}
+			localStorage.removeItem("progress");
+			localStorage.house = "Dirt Hut";
+			GAME.state = GAME.states.setupStart;
+		}), "shopButtons", 5);
+
+		GAME.world.add(clickableText("$5000", vec(325, 130), (GAME) => {
+			if(GAME.progress.coins < 5000){
+				GAME.audio.play("no");
+				return;
+			}
+			localStorage.removeItem("progress");
+			localStorage.house = "Apartment";
+			GAME.state = GAME.states.setupStart;
+		}), "shopButtons", 5);
+		
+		GAME.world.add(clickableText("$8000", vec(325, 160), (GAME) => {
+			if(GAME.progress.coins < 8000){
+				GAME.audio.play("no");
+				return;
+			}
+			localStorage.removeItem("progress");
+			localStorage.house = "Bungalow";
+			GAME.state = GAME.states.setupStart;
+		}), "shopButtons", 5);
+
+		GAME.world.add(clickableText("$15000", vec(325, 190), (GAME) => {
+			if(GAME.progress.coins < 15000){
+				GAME.audio.play("no");
+				return;
+			}
+			localStorage.removeItem("progress");
+			localStorage.house = "Farm";
+			GAME.state = GAME.states.setupStart;
+		}), "shopButtons", 5);
+	}
 
 	GAME.state = shop;
 }
@@ -77,6 +120,8 @@ const shop = (GAME, ctx) => {
 
 	GAME.world.update(GAME);
 
+	if(GAME.state !== shop) return;
+
 	//draw
 	ctx.save();
 	ctx.scale(GAME.c.scale, GAME.c.scale);
@@ -90,6 +135,15 @@ const shop = (GAME, ctx) => {
 	text.white15("Save:", 210, 160, ctx);
 	text.white5("Last save", 270, 155, ctx);
 	text.white5("Night " + (JSON.parse(localStorage.progress).night + 1), 270, 160, ctx);
+
+	if(GAME.progress.night >= 3){
+		ctx.fillStyle = "black";
+		ctx.fillRect(0, 0, GAME.width, GAME.height);
+		text.white15("Dirt Hut", 210, 100, ctx);
+		text.white15("Apartment", 210, 130, ctx);
+		text.white15("Bungalow", 210, 160, ctx);
+		text.white15("Farm", 210, 190, ctx);
+	}
 
 	text.grey15("Up: W", 17, 17, ctx);
 	text.grey15("Down: S", 17, 34, ctx);

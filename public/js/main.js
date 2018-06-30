@@ -182,8 +182,9 @@ Promise.all([
 		handlePlayerKeys(GAME);
 
 		//check time
-		if(GAME.world.clock.count > 6 * 3600){
+		if(GAME.world.clock.count > 6 * 3600 || true){
 			GAME.progress.night++;
+			GAME.progress.night = 3;
 			GAME.progress.sheep = GAME.world.sheep.length;
 			GAME.state = GAME.states.setupShop;
 		}
@@ -221,7 +222,9 @@ Promise.all([
 
 		ctx.save();
 		ctx.scale(c.scale, c.scale);
-		text.white40("Paused", 217, 150, ctx)
+		ctx.fillStyle = "black";
+		ctx.fillRect(150, 100, 300, 130)
+		text.white40("Paused", 230, 150, ctx)
 		text.white20("Press space to continue", 173, 200, ctx)
 		ctx.restore();
 	}
