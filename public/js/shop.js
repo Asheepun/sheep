@@ -44,8 +44,6 @@ const setupShop = (GAME) => {
 		GAME.state = GAME.states.setupNight;
 	}), "shopButtons", 5);
 
-	currentShopButton = 0;
-
 	if(GAME.progress.night >= 3){
 		GAME.world.clearTypes("shopButtons");
 
@@ -88,7 +86,14 @@ const setupShop = (GAME) => {
 			localStorage.house = "Farm";
 			GAME.state = GAME.states.setupStart;
 		}), "shopButtons", 5);
+
+		GAME.world.add(clickableText("No House (Shame)", vec(230, 230), (GAME) => {
+			localStorage.removeItem("progress");
+			GAME.state = GAME.states.setupStart;
+		}), "shopButtons", 5);
 	}
+
+	currentShopButton = 0;
 
 	GAME.state = shop;
 }

@@ -182,9 +182,8 @@ Promise.all([
 		handlePlayerKeys(GAME);
 
 		//check time
-		if(GAME.world.clock.count > 6 * 3600 || true){
+		if(GAME.world.clock.count > 6 * 3600){
 			GAME.progress.night++;
-			GAME.progress.night = 3;
 			GAME.progress.sheep = GAME.world.sheep.length;
 			GAME.state = GAME.states.setupShop;
 		}
