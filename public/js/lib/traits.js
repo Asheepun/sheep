@@ -229,39 +229,6 @@ export const addSpriteTrait = ({ color, img, alpha = 1, rotation = 0, visible = 
     }
 }
 
-export const addAnimationTrait = ({ frames, delay }) => (that) => {
-
-    that.frameDelay = delay;
-    that.state = "moving";
-    that.facing = "right";
-    that.frames = frames;
-
-    let counter = 0;
-
-    that.animate = ({ JSON }) => {
-		console.log(that.velocity.x)
-        counter++;
-
-        if((counter + 1) / that.frameDelay > JSON[that.frames][that.state][that.facing].length) counter = 0;
-
-        if(counter % that.frameDelay === 0){
-            that.imgPos.x = JSON[that.frames][that.state][that.facing][counter/that.frameDelay][0];
-            that.imgPos.y = JSON[that.frames][that.state][that.facing][counter/that.frameDelay][1];
-            that.imgSize.x = JSON[that.frames][that.state][that.facing][counter/that.frameDelay][2];
-            that.imgSize.y = JSON[that.frames][that.state][that.facing][counter/that.frameDelay][3];
-        }
-    }
-
-    that.handleState = () => {
-        if(that.velocity.x > 0 && that.canMove) that.facing = "right";
-        if(that.velocity.x < 0 && that.canMove) that.facing = "left";
-        if((that.velocity.x !== 0 || that.velocity.y !== 0) && that.canMove) that.state = "moving";
-        else that.state = "still";
-    }
-
-    that.addMethods("handleState", "animate");
-}
-
 export const addGunTrait = ({ gun, aiming = vec(1, 0) }) => (that) => {
 	that.gun = gun;
 	that.aiming = aiming;

@@ -25,6 +25,7 @@ Promise.all([
 		"playerFrames",
 		"wolfFrames",
 		"squirrelFrames",
+		"eagleFrames",
 	),
 	loaders.loadAudio(
 		0.3,
@@ -50,6 +51,7 @@ Promise.all([
 		"fox",
 		"wolf",
 		"squirrel",
+		"eagle",
 		"player_corpse",
 		"sheep_corpse",
 		"wolf_corpse",

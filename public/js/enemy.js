@@ -230,8 +230,6 @@ export const squirrel = (pos) => {
 
 		if(walkCounter > 0) that.frameState = "moving";
 		else that.frameState = "still";
-		console.log(that.frameState)
-		console.log(that.imgPos)
 	}
 
 	that.addMethods("animate");
@@ -290,9 +288,15 @@ export const eagle = (pos) => {
 		pos,
 		size: vec(20, 20),
 		health: 1,
-		color: "white",
-
+		img: "eagle",
+		imgSize: vec(20, 20),
 	});
+
+	traits.addFrameTrait({
+		delay: 5,
+		frames: "eagleFrames",
+		initState: "diving",
+	})(that);
 
 	that.oubArea = [-100, -100, 1000, 1000];
 
@@ -338,7 +342,14 @@ export const eagle = (pos) => {
 		}
 	}
 
-	that.addMethods("grabSheep", "scream");
+	that.animate = () => {
+		if(that.velocity.x > 0) that.facing.x = 1;
+		if(that.velocity.x < 0) that.facing.x = -1;
+		if(that.grabbing !== undefined) that.frameState = "grabbing";
+		console.log(that.frameState)
+	}
+
+	that.addMethods("grabSheep", "scream", "animate");
 
 	return that;
 }
