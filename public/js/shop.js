@@ -53,7 +53,7 @@ const setupShop = (GAME) => {
 				return;
 			}
 			localStorage.removeItem("progress");
-			localStorage.house = "Dirt Hut";
+			localStorage.house = "dir_hut";
 			GAME.state = GAME.states.setupStart;
 		}), "shopButtons", 5);
 
@@ -63,7 +63,7 @@ const setupShop = (GAME) => {
 				return;
 			}
 			localStorage.removeItem("progress");
-			localStorage.house = "Apartment";
+			localStorage.house = "apartment";
 			GAME.state = GAME.states.setupStart;
 		}), "shopButtons", 5);
 		
@@ -73,7 +73,7 @@ const setupShop = (GAME) => {
 				return;
 			}
 			localStorage.removeItem("progress");
-			localStorage.house = "Bungalow";
+			localStorage.house = "bungalow";
 			GAME.state = GAME.states.setupStart;
 		}), "shopButtons", 5);
 
@@ -83,7 +83,7 @@ const setupShop = (GAME) => {
 				return;
 			}
 			localStorage.removeItem("progress");
-			localStorage.house = "Farm";
+			localStorage.house = "farm";
 			GAME.state = GAME.states.setupStart;
 		}), "shopButtons", 5);
 

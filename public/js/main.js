@@ -26,6 +26,10 @@ Promise.all([
 		"wolfFrames",
 		"squirrelFrames",
 		"eagleFrames",
+		"no_houseFrames",
+		"dirt_hutFrames",
+		"apartmentFrames",
+		"bungalowFrames",
 	),
 	loaders.loadAudio(
 		0.3,
@@ -77,6 +81,10 @@ Promise.all([
 		"trap",
 		"used_trap",
 		"moon",
+		"no_house",
+		"dirt_hut",
+		"apartment",
+		"bungalow",
 	),
 ]).then(([ { c, ctx, pointer, width, height }, JSON, audio, sprites ]) => {
 

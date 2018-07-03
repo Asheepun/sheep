@@ -17,7 +17,7 @@ const setupStart = (GAME) => {
 		GAME.state = GAME.states.setupShop;
 	}
 
-	GAME.world.add(clickableText("New Game", vec(260, 130), (GAME) => {
+	GAME.world.add(clickableText("New Game", vec(270, 130), (GAME) => {
 		localStorage.progress = JSON.stringify({
 			coins: 0,
 			night: 0,
@@ -30,9 +30,35 @@ const setupStart = (GAME) => {
 	currentButton = 0;
 
 	if(localStorage.progress && JSON.parse(localStorage.progress).night > 0){
-		GAME.world.add(clickableText("Load Save", vec(260, 150), loadSave), "startButtons", 2);
+		GAME.world.add(clickableText("Load Save", vec(270, 150), loadSave), "startButtons", 2);
 		currentButton = 1;
 	}
+
+	localStorage.house = "bungalow";
+
+	const houseState = traitHolder();
+	
+	traits.addEntityTrait({
+		pos: vec(280, 50),
+		size: vec(40, 40),
+	})(houseState);
+
+	traits.addSpriteTrait({
+		img: "no_house",
+		imgSize: vec(40, 40),
+	})(houseState);
+
+	traits.addFrameTrait({
+		delay: 8,
+		frames: "no_houseFrames",
+	})(houseState);
+
+	if(localStorage.house !== undefined){
+		houseState.img = localStorage.house;
+		houseState.frames = localStorage.house + "Frames";
+	}
+
+	GAME.world.add(houseState, "houseState", 5, true);
 
 	GAME.state = start;
 }
@@ -75,8 +101,10 @@ const start = (GAME, ctx) => {
 	text.grey15("Down: S", 17, 34, ctx);
 	text.grey15("Select: Space", 17, 51, ctx);
 
-	if(localStorage.house === undefined) text.white20("No House", 250, 70, ctx);
-	else text.white20(localStorage.house, 250, 70, ctx);
+	/*
+	if(localStorage.house === undefined) ctx.drawImage(GAME.sprites.no_house, 280, 50, 40, 40);
+	else text.white20(localStorage.house, 260, 70, ctx);
+	*/
 
 	GAME.world.draw(ctx, GAME.sprites);
 
