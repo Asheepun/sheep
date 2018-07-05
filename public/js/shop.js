@@ -41,7 +41,7 @@ const setupShop = (GAME) => {
 	}), "shopButtons", 5);
 
 	GAME.world.add(clickableText("Continue", vec(255, 200), (GAME) => {
-		GAME.state = GAME.states.setupNight;
+		GAME.fadeToState("setupNight");
 	}), "shopButtons", 5);
 
 	if(GAME.progress.night >= 3){
@@ -54,7 +54,7 @@ const setupShop = (GAME) => {
 			}
 			localStorage.removeItem("progress");
 			localStorage.house = "dir_hut";
-			GAME.state = GAME.states.setupStart;
+			GAME.fadeToState("setupStart");
 		}), "shopButtons", 5);
 
 		GAME.world.add(clickableText("$5000", vec(325, 130), (GAME) => {
@@ -64,7 +64,7 @@ const setupShop = (GAME) => {
 			}
 			localStorage.removeItem("progress");
 			localStorage.house = "apartment";
-			GAME.state = GAME.states.setupStart;
+			GAME.fadeToState("setupStart");
 		}), "shopButtons", 5);
 		
 		GAME.world.add(clickableText("$8000", vec(325, 160), (GAME) => {
@@ -74,7 +74,7 @@ const setupShop = (GAME) => {
 			}
 			localStorage.removeItem("progress");
 			localStorage.house = "bungalow";
-			GAME.state = GAME.states.setupStart;
+			GAME.fadeToState("setupStart");
 		}), "shopButtons", 5);
 
 		GAME.world.add(clickableText("$15000", vec(325, 190), (GAME) => {
@@ -84,12 +84,12 @@ const setupShop = (GAME) => {
 			}
 			localStorage.removeItem("progress");
 			localStorage.house = "farm";
-			GAME.state = GAME.states.setupStart;
+			GAME.fadeToState("setupStart");
 		}), "shopButtons", 5);
 
 		GAME.world.add(clickableText("No House (Shame)", vec(230, 230), (GAME) => {
 			localStorage.removeItem("progress");
-			GAME.state = GAME.states.setupStart;
+			GAME.fadeToState("setupStart");
 		}), "shopButtons", 5);
 	}
 

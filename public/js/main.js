@@ -30,6 +30,7 @@ Promise.all([
 		"dirt_hutFrames",
 		"apartmentFrames",
 		"bungalowFrames",
+		"farmFrames",
 	),
 	loaders.loadAudio(
 		0.3,
@@ -85,6 +86,7 @@ Promise.all([
 		"dirt_hut",
 		"apartment",
 		"bungalow",
+		"farm",
 	),
 ]).then(([ { c, ctx, pointer, width, height }, JSON, audio, sprites ]) => {
 
@@ -193,12 +195,12 @@ Promise.all([
 		if(GAME.world.clock.count > 6 * 3600){
 			GAME.progress.night++;
 			GAME.progress.sheep = GAME.world.sheep.length;
-			GAME.state = GAME.states.setupShop;
+			GAME.fadeToState("setupShop");
 		}
 
 		//check sheep
 		if(GAME.world.sheep.length === 0){
-			GAME.state = GAME.states.lost;
+			GAME.fadeToState("lost");
 		}
 
 		GAME.world.update(GAME);
@@ -236,6 +238,25 @@ Promise.all([
 		ctx.restore();
 	}
 
+	let totalFade = 0;
+	let fadeOut = 0;
+	GAME.fadeToState = (state, fade = 0.03) => {
+		GAME.state = (GAME) => {
+			totalFade += fade;
+
+			ctx.globalAlpha = totalFade;
+			ctx.fillStyle = "black";
+			ctx.fillRect(0, 0, GAME.c.width, GAME.c.height);
+			ctx.globalAlpha = 1;
+
+			if(totalFade >= 0.5) {
+				totalFade = 0;
+				GAME.state = GAME.states[state];
+				fadeOut = 1;
+			}
+		}
+	}
+
 	let wait = 180;
 
 	GAME.states.lost = (GAME, ctx) => {
@@ -264,6 +285,11 @@ Promise.all([
 		}
 		GAME.state(GAME, ctx);
 		GAME.keys.update();
+		if(fadeOut > 0.05) fadeOut -= 0.05;
+		else fadeOut = 0;
+		ctx.globalAlpha = fadeOut;
+		ctx.fillRect(0, 0, GAME.c.width, GAME.c.height);
+		ctx.globalAlpha = 1;
 		setTimeout(loop, 1000/60);
 	}
 

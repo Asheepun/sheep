@@ -10,11 +10,11 @@ const setupStart = (GAME) => {
 
 	const startNight = (GAME) => {
 		GAME.progress = JSON.parse(localStorage.progress);
-		GAME.state = GAME.states.setupNight;
+		GAME.fadeToState("setupNight");
 	}
 	const loadSave = (GAME) => {
 		startNight(GAME);
-		GAME.state = GAME.states.setupShop;
+		GAME.fadeToState("setupShop");
 	}
 
 	GAME.world.add(clickableText("New Game", vec(270, 130), (GAME) => {
@@ -33,8 +33,6 @@ const setupStart = (GAME) => {
 		GAME.world.add(clickableText("Load Save", vec(270, 150), loadSave), "startButtons", 2);
 		currentButton = 1;
 	}
-
-	localStorage.house = "bungalow";
 
 	const houseState = traitHolder();
 	
@@ -100,11 +98,6 @@ const start = (GAME, ctx) => {
 	text.grey15("Up: W", 17, 17, ctx);
 	text.grey15("Down: S", 17, 34, ctx);
 	text.grey15("Select: Space", 17, 51, ctx);
-
-	/*
-	if(localStorage.house === undefined) ctx.drawImage(GAME.sprites.no_house, 280, 50, 40, 40);
-	else text.white20(localStorage.house, 260, 70, ctx);
-	*/
 
 	GAME.world.draw(ctx, GAME.sprites);
 
