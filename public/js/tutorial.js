@@ -66,7 +66,7 @@ const tutorial = (GAME, ctx) => {
 
 	if(lastEnemies && GAME.world.enemies.length === 0){
 		localStorage.tutorial = true;
-		GAME.fadeToState("setupStart", 0.001);
+		GAME.fadeToState("setupStart");
 	}
 
 

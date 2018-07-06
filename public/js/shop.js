@@ -53,7 +53,7 @@ const setupShop = (GAME) => {
 				return;
 			}
 			localStorage.removeItem("progress");
-			localStorage.house = "dir_hut";
+			localStorage.house = "dirt_hut";
 			GAME.fadeToState("setupStart");
 		}), "shopButtons", 5);
 

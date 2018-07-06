@@ -18,6 +18,7 @@ import * as text 				 		 from "/js/lib/text.js";
 import setupShop				 		 from "/js/shop.js";
 import setupStart						 from "/js/start.js";
 import setupTutorial					 from "/js/tutorial.js";
+import intro							 from "/js/intro.js";
 import moon						 		 from "/js/moon.js";
 
 Promise.all([
@@ -113,6 +114,7 @@ Promise.all([
 			setupShop,
 			setupStart,
 			setupTutorial,
+			intro,
 		},
 		progress: {},
 	};
@@ -186,12 +188,14 @@ Promise.all([
 			GAME.world.add(spawner, spawner.place, 0);
 		});
 
-		GAME.world.add(spawnHandler(), "spawnHandler", 0, true);
+		GAME.initWait = 60 * 5;
 
 		GAME.state = GAME.states.night;
 	}
 
 	GAME.states.night = () => {
+		GAME.initWait--;
+		if(GAME.initWait === 0) GAME.world.add(spawnHandler(), "spawnHandler", 0, true);
 
 		GAME.handlePlayerKeys(GAME);
 
@@ -278,8 +282,7 @@ Promise.all([
 		ctx.restore();
 	}
 
-	if(localStorage.tutorial === undefined) GAME.fadeToState("setupTutorial")
-	else GAME.fadeToState("setupStart");
+	GAME.fadeToState("intro")
 
 	let unpausedState;
 	
