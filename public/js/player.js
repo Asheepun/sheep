@@ -157,7 +157,7 @@ export const playerArm = () => {
 	const that = traitHolder();
 
 	traits.addEntityTrait({
-		pos: vec(100, 100),
+		pos: vec(-100, -100),
 		size: vec(6, 4),
 	})(that);
 

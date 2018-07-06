@@ -81,7 +81,7 @@ const enemy = ({ pos, size, health, color, img, imgSize, corpseSize }) => {
 
 	that.die = ({ world: { remove, combo, player }, progress }) => {
 		player.kills++;
-		combo.counter++;
+		if(combo) combo.counter++;
 		remove(that);
 		if(that.gun) remove(that.gun);
 	}
@@ -137,7 +137,7 @@ export const wolf = (pos) => {
 	that.grabbing;
 
 	that.grabSheep = ({ world: { sheep } }) => {
-		sheepCol = checkSetCol(that, sheep);
+		if(sheep) sheepCol = checkSetCol(that, sheep);
 
 		if(sheepCol && !sheepCol.grabbed && !that.grabbing){
 			that.grabbing = sheepCol;

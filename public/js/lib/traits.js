@@ -142,7 +142,7 @@ export const addMoveTrait = ({ velocity = vec(0, 0), canMove = true, obstacleTyp
         if(oub) that.handleOubX(GAME);
         if(that.handleColX){
             obstacleTypes.forEach(ot => {
-                if(!col) col = checkSetCol(that, GAME.world[ot]);
+                if(!col && GAME.world[ot]) col = checkSetCol(that, GAME.world[ot]);
             });
             if(col) that.handleColX(col, GAME);
             else{
@@ -160,12 +160,12 @@ export const addMoveTrait = ({ velocity = vec(0, 0), canMove = true, obstacleTyp
         if(oub) that.handleOubY(GAME);
         if(that.handleColY){
             obstacleTypes.forEach(ot => {
-                if(!col) col = checkSetCol(that, GAME.world[ot]);
+                if(!col && GAME.world[ot]) col = checkSetCol(that, GAME.world[ot]);
             });
             if(col) that.handleColY(col, GAME);
 
         }
-		if(that.handlePlatformCol){
+		if(that.handlePlatformCol && GAME.world.platforms){
 			platCol = checkPlatformSetCol(that, GAME.world.platforms);
 			if(platCol) that.handlePlatformCol(platCol, GAME);
 		}

@@ -17,6 +17,7 @@ import bullet 					 		 from "/js/bullet.js";
 import * as text 				 		 from "/js/lib/text.js";
 import setupShop				 		 from "/js/shop.js";
 import setupStart						 from "/js/start.js";
+import setupTutorial					 from "/js/tutorial.js";
 import moon						 		 from "/js/moon.js";
 
 Promise.all([
@@ -111,6 +112,7 @@ Promise.all([
 		states: {
 			setupShop,
 			setupStart,
+			setupTutorial,
 		},
 		progress: {},
 	};
@@ -134,6 +136,8 @@ Promise.all([
 		"C",
 		"c",
 	);
+
+	GAME.handlePlayerKeys = handlePlayerKeys;
 
 	GAME.states.setupNight = () => {
 
@@ -189,7 +193,7 @@ Promise.all([
 
 	GAME.states.night = () => {
 
-		handlePlayerKeys(GAME);
+		GAME.handlePlayerKeys(GAME);
 
 		//check time
 		if(GAME.world.clock.count > 6 * 3600){
@@ -274,7 +278,8 @@ Promise.all([
 		ctx.restore();
 	}
 
-	GAME.state = GAME.states.setupStart;
+	if(localStorage.tutorial === undefined) GAME.fadeToState("setupTutorial")
+	else GAME.fadeToState("setupStart");
 
 	let unpausedState;
 	
