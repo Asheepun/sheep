@@ -10,9 +10,9 @@ const createCanvas = (width = 800, height = 600, element = document.body) => new
     //fix canvas size
     const dif = height/width;
 
-    const reSize  = () => {
-		c.style.position = "relative";
+	c.style.position = "absolute";
 
+    const reSize  = () => {
         c.width = window.innerWidth-10;
         c.height = c.width*dif;
         while(c.height > window.innerHeight-10){
@@ -21,12 +21,15 @@ const createCanvas = (width = 800, height = 600, element = document.body) => new
         }
 		c.scale = c.width/width;
 
+		c.style.position = "relative";
+
 		const rect = c.getBoundingClientRect();
 
 		c.style.position = "absolute";
-		c.style.top = c.style.bottom = (rect.top + rect.bottom) / 2 + "px";
-		c.style.left = c.style.right = (rect.left + rect.right) / 2 + "px";
+		c.style.top = c.style.bottom = (c.style.top + c.style.bottom) / 2 + "px";
+		c.style.left = c.style.right = (c.style.left + c.style.right) / 2 + "px";
 
+		console.log(c.getBoundingClientRect());
 
     }
     reSize();
