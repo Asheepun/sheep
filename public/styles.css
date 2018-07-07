@@ -1,7 +1,11 @@
 *{
-	margin:0px auto;
+	margin:auto;
 	padding:0px;
 	text-align:center;
+}
+
+body{
+	background: black;
 }
 
 @font-face{
