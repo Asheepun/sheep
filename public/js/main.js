@@ -51,6 +51,7 @@ Promise.all([
 		"first_music",
 		"set_trap",
 		"eagle",
+		"main",
 	),
 	loaders.loadSprites(
 		"player",
@@ -193,14 +194,18 @@ Promise.all([
 		GAME.state = GAME.states.night;
 	}
 
-	GAME.states.night = () => {
+	GAME.states.night = (GAME) => {
 		GAME.initWait--;
-		if(GAME.initWait === 0) GAME.world.add(spawnHandler(), "spawnHandler", 0, true);
+		if(GAME.initWait === 0){
+			GAME.world.add(spawnHandler(), "spawnHandler", 0, true);
+			GAME.audio.loop("main");
+		}
 
 		GAME.handlePlayerKeys(GAME);
 
 		//check time
 		if(GAME.world.clock.count > 6 * 3600){
+			GAME.audio.stop("main");
 			GAME.progress.night++;
 			GAME.progress.sheep = GAME.world.sheep.length;
 			GAME.fadeToState("setupShop");
