@@ -7,6 +7,7 @@ import * as loaders  			 		 from "/js/lib/assets.js";
 import spawnHandler 			 		 from "/js/spawnHandler.js";
 import nights 							 from "/js/spawners.js";
 import handlePlayerKeys 		 		 from "/js/playerKeys.js";
+import handleSettingsKeys, * as settings from "/js/settings.js";
 import clock					 		 from "/js/clock.js";
 import * as hud 				 		 from "/js/hud.js";
 import player, { playerArm } 			 from "/js/player.js";
@@ -51,7 +52,7 @@ Promise.all([
 		"first_music",
 		"set_trap",
 		"eagle",
-		"main",
+		"enemies",
 	),
 	loaders.loadSprites(
 		"player",
@@ -90,6 +91,7 @@ Promise.all([
 		"apartment",
 		"bungalow",
 		"farm",
+		"volume",
 	),
 ]).then(([ { c, ctx, pointer, width, height }, JSON, audio, sprites ]) => {
 
@@ -138,6 +140,8 @@ Promise.all([
 		"l",
 		"C",
 		"c",
+		"+",
+		"-",
 	);
 
 	GAME.handlePlayerKeys = handlePlayerKeys;
@@ -170,6 +174,8 @@ Promise.all([
 		
 		GAME.world.add(hud.combo(), "combo", 10, true);
 
+		GAME.world.add(settings.volume(vec(570, 35)), "volume", 10, true);
+
 		//add shadows and moon
 		for(let i = 0; i < 10; i++){
 			for(let j = 0; j < 20; j++){
@@ -198,14 +204,13 @@ Promise.all([
 		GAME.initWait--;
 		if(GAME.initWait === 0){
 			GAME.world.add(spawnHandler(), "spawnHandler", 0, true);
-			GAME.audio.loop("main");
+			GAME.audio.play("enemies");
 		}
 
 		GAME.handlePlayerKeys(GAME);
 
 		//check time
 		if(GAME.world.clock.count > 6 * 3600){
-			GAME.audio.stop("main");
 			GAME.progress.night++;
 			GAME.progress.sheep = GAME.world.sheep.length;
 			GAME.fadeToState("setupShop");
@@ -291,19 +296,29 @@ Promise.all([
 
 	let unpausedState;
 	
-	const loop = () => {
-		if(!document.hasFocus()){
-			if(GAME.state !== GAME.states.pause) unpausedState = GAME.state;
-			GAME.state = GAME.states.pause;
+	const timeScl = (1/60)*1000;
+	let lastTime = 0;
+	let accTime = 0;
+
+	const loop = (time = 0) => {
+		accTime += time - lastTime;
+		lastTime = time;
+		while(accTime > timeScl){
+			handleSettingsKeys(GAME);
+			if(!document.hasFocus()){
+				if(GAME.state !== GAME.states.pause) unpausedState = GAME.state;
+				GAME.state = GAME.states.pause;
+			}
+			GAME.state(GAME, ctx);
+			GAME.keys.update();
+			if(fadeOut > 0.05) fadeOut -= 0.05;
+			else fadeOut = 0;
+			ctx.globalAlpha = fadeOut;
+			ctx.fillRect(0, 0, GAME.c.width, GAME.c.height);
+			ctx.globalAlpha = 1;
+			accTime -= timeScl;
 		}
-		GAME.state(GAME, ctx);
-		GAME.keys.update();
-		if(fadeOut > 0.05) fadeOut -= 0.05;
-		else fadeOut = 0;
-		ctx.globalAlpha = fadeOut;
-		ctx.fillRect(0, 0, GAME.c.width, GAME.c.height);
-		ctx.globalAlpha = 1;
-		setTimeout(loop, 1000/60);
+		requestAnimationFrame(loop);
 	}
 
 	loop();

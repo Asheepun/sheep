@@ -1,7 +1,8 @@
-import * as text 				from "/js/lib/text.js";
-import traitHolder, * as traits from "/js/lib/traits.js";
-import vec, * as v 				from "/js/lib/vector.js";
-import * as hud 				from "/js/hud.js";
+import * as text 						 from "/js/lib/text.js";
+import traitHolder, * as traits 		 from "/js/lib/traits.js";
+import vec, * as v 						 from "/js/lib/vector.js";
+import * as hud 						 from "/js/hud.js";
+import handleSettingsKeys, * as settings from "/js/settings.js";
 
 let currentButton;
 
@@ -33,6 +34,8 @@ const setupStart = (GAME) => {
 		GAME.world.add(clickableText("Load Save", vec(270, 150), loadSave), "startButtons", 2);
 		currentButton = 1;
 	}
+
+	GAME.world.add(settings.volume(vec(570, 35)), "volume", 10, true);
 
 	const houseState = traitHolder();
 	
@@ -98,6 +101,8 @@ const start = (GAME, ctx) => {
 	text.grey15("Up: W", 17, 17, ctx);
 	text.grey15("Down: S", 17, 34, ctx);
 	text.grey15("Select: Space", 17, 51, ctx);
+	text.grey15("VolumeUp: +", 17, 68, ctx);
+	text.grey15("VolumeDown: -", 17, 85, ctx);
 
 	GAME.world.draw(ctx, GAME.sprites);
 
