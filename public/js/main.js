@@ -53,6 +53,7 @@ Promise.all([
 		"set_trap",
 		"eagle",
 		"enemies",
+		"shop",
 	),
 	loaders.loadSprites(
 		"player",

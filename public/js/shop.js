@@ -42,6 +42,7 @@ const setupShop = (GAME) => {
 	}), "shopButtons", 5);
 
 	GAME.world.add(clickableText("Continue", vec(255, 200), (GAME) => {
+		GAME.audio.stop("shop");
 		GAME.fadeToState("setupNight");
 	}), "shopButtons", 5);
 
@@ -55,6 +56,7 @@ const setupShop = (GAME) => {
 			}
 			localStorage.removeItem("progress");
 			localStorage.house = "dirt_hut";
+			GAME.audio.stop("shop");
 			GAME.fadeToState("setupStart");
 		}), "shopButtons", 5);
 
@@ -65,6 +67,7 @@ const setupShop = (GAME) => {
 			}
 			localStorage.removeItem("progress");
 			localStorage.house = "apartment";
+			GAME.audio.stop("shop");
 			GAME.fadeToState("setupStart");
 		}), "shopButtons", 5);
 		
@@ -75,6 +78,7 @@ const setupShop = (GAME) => {
 			}
 			localStorage.removeItem("progress");
 			localStorage.house = "bungalow";
+			GAME.audio.stop("shop");
 			GAME.fadeToState("setupStart");
 		}), "shopButtons", 5);
 
@@ -85,16 +89,20 @@ const setupShop = (GAME) => {
 			}
 			localStorage.removeItem("progress");
 			localStorage.house = "farm";
+			GAME.audio.stop("shop");
 			GAME.fadeToState("setupStart");
 		}), "shopButtons", 5);
 
 		GAME.world.add(clickableText("No House (Shame)", vec(230, 230), (GAME) => {
 			localStorage.removeItem("progress");
+			GAME.audio.stop("shop");
 			GAME.fadeToState("setupStart");
 		}), "shopButtons", 5);
 	}
 
 	GAME.world.add(settings.volume(vec(570, 35)), "volume", 10, true);
+
+	GAME.audio.loop("shop");
 
 	currentShopButton = 0;
 
