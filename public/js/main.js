@@ -54,6 +54,7 @@ Promise.all([
 		"eagle",
 		"enemies",
 		"shop",
+		"start",
 	),
 	loaders.loadSprites(
 		"player",

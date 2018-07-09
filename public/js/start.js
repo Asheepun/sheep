@@ -10,10 +10,12 @@ const setupStart = (GAME) => {
 	GAME.world.clearAll();
 
 	const startNight = (GAME) => {
+		GAME.audio.stop("start");
 		GAME.progress = JSON.parse(localStorage.progress);
 		GAME.fadeToState("setupNight");
 	}
 	const loadSave = (GAME) => {
+		GAME.audio.stop("start");
 		startNight(GAME);
 		GAME.fadeToState("setupShop");
 	}
@@ -60,6 +62,8 @@ const setupStart = (GAME) => {
 	}
 
 	GAME.world.add(houseState, "houseState", 5, true);
+
+	GAME.audio.loop("start");
 
 	GAME.state = start;
 }
