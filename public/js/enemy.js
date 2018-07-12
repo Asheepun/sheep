@@ -247,6 +247,12 @@ export const fox = (pos) => {
 		corpseSize: vec(20, 6),
 	});
 
+	traits.addFrameTrait({
+		delay: 6,
+		frames: "foxFrames",
+		initState: "moving",
+	})(that);
+
 	traits.addCheckColTrait({
 		sets: ["sheep"],
 		singles: ["player"],
@@ -290,6 +296,7 @@ export const eagle = (pos) => {
 		health: 1,
 		img: "eagle",
 		imgSize: vec(20, 20),
+		corpseSize: vec(20, 12),
 	});
 
 	traits.addFrameTrait({
